@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnooRyze Mini CMS | Portal Login & Dashboard</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- ==========================================
+       1. CMS LOGIN VIEW
+       ========================================== -->
+    <div class="login-body" id="admin-login-wrapper">
+
+        <!-- Animated background orbs -->
+        <div class="login-bg-orb orb-1"></div>
+        <div class="login-bg-orb orb-2"></div>
+        <div class="login-bg-orb orb-3"></div>
+
+        <div class="login-card">
+
+            <!-- Logo / Brand -->
+            <div class="login-header">
+                <div class="login-logo-icon">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect width="28" height="28" rx="8" fill="url(#logoGrad)"/>
+                        <path d="M8 14h12M14 8v12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28">
+                                <stop offset="0%" stop-color="#38BDF8"/>
+                                <stop offset="100%" stop-color="#0B2C5D"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1>InnooRyze<span> CMS</span></h1>
+                <p>Sign in to manage your client websites</p>
+            </div>
+
+            <form id="login-form" onsubmit="handleAdminLogin(event)" autocomplete="off">
+
+                <!-- Email Field -->
+                <div class="lf-group">
+                    <label for="login-email">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        Email Address
+                    </label>
+                    <input type="email" id="login-email" class="lf-input" value="admin@maxsealinc.com" placeholder="you@company.com" required autocomplete="email">
+                </div>
+
+                <!-- Password Field with Eye Toggle -->
+                <div class="lf-group">
+                    <label for="login-password">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        Password
+                    </label>
+                    <div class="lf-password-wrap">
+                        <input type="password" id="login-password" class="lf-input" value="admin123" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" id="toggle-password" class="lf-eye-btn" title="Toggle password visibility" onclick="togglePasswordVisibility()">
+                            <!-- Eye Open -->
+                            <svg id="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <!-- Eye Closed (hidden by default) -->
+                            <svg id="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                        </button>
+                    </div>
+                    <div class="lf-forgot" onclick="alert('Password reset link has been dispatched to your email.')">Forgot Password?</div>
+                </div>
+
+                <!-- Role Selector -->
+                <div class="lf-group">
+                    <label for="login-role">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        Workflow Role
+                    </label>
+                    <div class="lf-select-wrap">
+                        <select id="login-role" class="lf-input lf-select">
+                            <option value="Admin">Admin (Can Publish &amp; Seed DB)</option>
+                            <option value="Reviewer">Reviewer (Can Approve Drafts)</option>
+                            <option value="Editor">Editor (Can Create &amp; Edit Drafts)</option>
+                        </select>
+                        <svg class="lf-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+
+                <button type="submit" class="lf-submit-btn" id="login-submit-btn">
+                    <span class="lf-btn-text">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        Sign In Securely
+                    </span>
+                </button>
+            </form>
+
+            <div class="lf-workflow-info">
+                <div class="lf-divider"><span>Workflow Rules</span></div>
+                <div class="lf-workflow-chain">
+                    <span>Editor</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span>Draft</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span>Reviewer</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span>Approve</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span>Admin</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span>Publish</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+    // Password eye toggle
+    function togglePasswordVisibility() {
+        const input = document.getElementById('login-password');
+        const eyeOpen = document.getElementById('eye-open');
+        const eyeClosed = document.getElementById('eye-closed');
+        if (input.type === 'password') {
+            input.type = 'text';
+            eyeOpen.style.display = 'none';
+            eyeClosed.style.display = 'block';
+        } else {
+            input.type = 'password';
+            eyeOpen.style.display = 'block';
+            eyeClosed.style.display = 'none';
+        }
+    }
+
+    // Login button loading state
+    document.getElementById('login-form').addEventListener('submit', function() {
+        const btn = document.getElementById('login-submit-btn');
+        if (btn) {
+            btn.classList.add('loading');
+            btn.disabled = true;
+            setTimeout(() => { btn.classList.remove('loading'); btn.disabled = false; }, 3000);
+        }
+    });
+    </script>
+
+    <!-- ==========================================
+       2. CMS DASHBOARD PANEL VIEW
+       ========================================== -->
+    <div class="admin-wrapper" id="admin-dashboard-wrapper" style="display: none;">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar-menu">
+            <div class="sidebar-logo">
+                <span class="sidebar-logo-title">InnooRyze<span> CMS</span></span>
+                <span class="sidebar-logo-sub">MULTI-TENANT CMS</span>
+            </div>
+
+            <!-- Site Selector Context -->
+            <div style="padding: 16px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                <label for="admin-site-context" style="font-size: 11px; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 6px;">Active Site Context:</label>
+                <select id="admin-site-context" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; color: white; font-size: 13px; font-weight: 600; outline: none; cursor: pointer;">
+                    <option value="maxseal">MAX-SEAL Valves</option>
+                    <option value="abcschool">ABC School</option>
+                    <option value="hospital">City Hospital</option>
+                </select>
+            </div>
+            
+            <div class="sidebar-user-card">
+                <div class="user-avatar" id="current-user-avatar">A</div>
+                <div class="user-meta-info">
+                    <h4 id="current-user-email">admin@maxsealinc.com</h4>
+                    <span class="user-role-badge" id="current-user-role">Admin</span>
+                </div>
+            </div>
+            
+            <ul class="sidebar-nav-links" id="sidebar-menu-links">
+                <li class="active" data-target="dashboard">
+                    <a href="#/dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+                </li>
+                <li data-target="products">
+                    <a href="#/products"><i data-lucide="package"></i> Products / Services</a>
+                </li>
+                <li data-target="documents">
+                    <a href="#/documents"><i data-lucide="file-text"></i> Document Manager</a>
+                </li>
+                <li data-target="media">
+                    <a href="#/media"><i data-lucide="image"></i> Media Library</a>
+                </li>
+                <li data-target="marketing">
+                    <a href="#/marketing"><i data-lucide="tv"></i> Marketing</a>
+                </li>
+                <li data-target="partners">
+                    <a href="#/partners"><i data-lucide="users"></i> Global Partners</a>
+                </li>
+                <li data-target="settings">
+                    <a href="#/settings"><i data-lucide="settings"></i> Settings</a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <a href="#" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.2); color: white; width: 100%; font-size: 13px;" onclick="handleAdminLogout()">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Panel -->
+        <main class="admin-main-panel">
+            
+            <!-- Top bar -->
+            <div class="admin-top-bar">
+                <h1 id="admin-view-title">Dashboard Overview</h1>
+                <div style="display:flex; gap:12px;">
+                    <a href="maxseal.html" target="_blank" class="action-btn action-btn-primary" id="launch-site-btn" style="padding: 10px 18px; font-size: 13px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                        <i data-lucide="external-link"></i> Launch Website
+                    </a>
+                    <a href="redesign.html?site=maxseal" target="_blank" class="action-btn" id="redesign-site-btn" style="padding: 10px 18px; font-size: 13px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:#E2E8F0; border-color:#CBD5E1; color:var(--admin-text-primary);">
+                        <i data-lucide="palette"></i> Redesign Site
+                    </a>
+                </div>
+            </div>
+
+            <!-- ==========================================
+               2.1. DASHBOARD OVERVIEW SECTION
+               ========================================== -->
+            <section id="admin-dashboard-section" class="admin-view-section active">
+                <div class="admin-stats-grid">
+                    <div class="admin-stat-card">
+                        <div class="stat-card-details">
+                            <h3>Products / Services</h3>
+                            <p id="dash-count-products">0</p>
+                        </div>
+                        <div class="stat-card-icon"><i data-lucide="package"></i></div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-card-details">
+                            <h3>Document Catalogs</h3>
+                            <p id="dash-count-docs">0</p>
+                        </div>
+                        <div class="stat-card-icon"><i data-lucide="file-text"></i></div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-card-details">
+                            <h3>Media Files</h3>
+                            <p id="dash-count-media">0</p>
+                        </div>
+                        <div class="stat-card-icon"><i data-lucide="image"></i></div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-card-details">
+                            <h3>Site ID Slug</h3>
+                            <p id="dash-site-slug" style="font-size: 24px; color: var(--admin-sidebar); margin-top: 6px; font-weight:700;">maxseal</p>
+                        </div>
+                        <div class="stat-card-icon"><i data-lucide="database"></i></div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities / Database status -->
+                <div class="admin-module-card" style="padding: 24px;">
+                    <h3 style="margin-bottom: 16px;"><i data-lucide="info" style="vertical-align: middle;"></i> Supabase Database Status</h3>
+                    <div id="db-health-report" style="background-color: var(--admin-bg); padding: 16px; border-radius: var(--radius); border-left: 4px solid var(--color-published); font-size: 14px;">
+                        Checking database connection...
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+               2.2. PRODUCTS SECTION
+               ========================================== -->
+            <section id="admin-products-section" class="admin-view-section">
+                <div class="admin-module-card">
+                    <div class="admin-module-header">
+                        <h2>Content Items List</h2>
+                        <div class="admin-module-actions">
+                            <button class="action-btn action-btn-primary" onclick="openProductModal()"><i data-lucide="plus"></i> Add Item</button>
+                        </div>
+                    </div>
+                    <div class="admin-table-container">
+                        <table class="admin-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Workflow Status</th>
+                                    <th>Updated Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-products-table-body">
+                                <tr><td colspan="6" style="text-align: center;">Loading products...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+               2.3. DOCUMENTS SECTION
+               ========================================== -->
+            <section id="admin-documents-section" class="admin-view-section">
+                <div class="admin-module-card">
+                    <div class="admin-module-header">
+                        <h2>Document Catalogs & Versions</h2>
+                        <div class="admin-module-actions">
+                            <button class="action-btn action-btn-primary" onclick="openDocumentModal()"><i data-lucide="upload"></i> Upload PDF Catalog</button>
+                        </div>
+                    </div>
+                    <div class="admin-table-container">
+                        <table class="admin-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Preview</th>
+                                    <th>Document Title</th>
+                                    <th>Document Type</th>
+                                    <th>Version</th>
+                                    <th>Status</th>
+                                    <th>Updated Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-documents-table-body">
+                                <tr><td colspan="7" style="text-align: center;">Loading documents...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+               2.4. MEDIA LIBRARY SECTION
+               ========================================== -->
+            <section id="admin-media-section" class="admin-view-section">
+                <div class="media-upload-area" onclick="triggerMediaUpload()">
+                    <i data-lucide="cloud-upload" class="media-upload-icon"></i>
+                    <h3>Upload New Media Assets</h3>
+                    <p style="color: var(--admin-text-secondary); margin-top: 6px; font-size: 13px;">Supports JPG, PNG, WEBP, and PDF. Click to select a file.</p>
+                    <input type="file" id="media-file-input" style="display: none;" onchange="handleMediaFileSelect(event)">
+                </div>
+
+                <div class="admin-module-card" style="padding: 24px;">
+                    <h2 style="font-size: 18px; margin-bottom: 20px;">Media Asset Grid</h2>
+                    <div class="media-grid" id="admin-media-grid"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+               2.5. MARKETING RESOURCES SECTION
+               ========================================== -->
+            <section id="admin-marketing-section" class="admin-view-section">
+                <div class="admin-module-card">
+                    <div class="admin-module-header">
+                        <h2>Marketing Resources (Videos / Flyers)</h2>
+                        <div class="admin-module-actions">
+                            <button class="action-btn action-btn-primary" onclick="openMarketingModal()"><i data-lucide="plus"></i> Add Resource</button>
+                        </div>
+                    </div>
+                    <div class="admin-table-container">
+                        <table class="admin-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>File URL</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-marketing-table-body">
+                                <tr><td colspan="5" style="text-align: center;">Loading marketing assets...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+               2.6. GLOBAL PARTNERS SECTION
+               ========================================== -->
+            <section id="admin-partners-section" class="admin-view-section">
+                <div class="admin-module-card">
+                    <div class="admin-module-header">
+                        <h2>Distributors & Global Partners</h2>
+                        <div class="admin-module-actions">
+                            <button class="action-btn action-btn-primary" onclick="openPartnerModal()"><i data-lucide="plus"></i> Add Partner</button>
+                        </div>
+                    </div>
+                    <div class="admin-table-container">
+                        <table class="admin-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Distributor Name</th>
+                                    <th>Country</th>
+                                    <th>Website</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-partners-table-body">
+                                <tr><td colspan="4" style="text-align: center;">Loading partner entries...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+               2.7. SETTINGS SECTION
+               ========================================== -->
+            <section id="admin-settings-section" class="admin-view-section">
+                <div class="admin-module-card" style="padding: 32px;">
+                    <h2 style="font-size: 20px; border-bottom: 1px solid var(--admin-border); padding-bottom: 16px; margin-bottom: 24px;">Global Website Settings</h2>
+                    
+                    <form id="settings-form" onsubmit="handleSettingsSave(event)">
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label for="settings-company">Company Name</label>
+                                <input type="text" id="settings-company" class="admin-input-control" required>
+                            </div>
+                            <div class="admin-form-group">
+                                <label for="settings-logo">Header Logo Text</label>
+                                <input type="text" id="settings-logo" class="admin-input-control" required>
+                            </div>
+                        </div>
+                        <div class="admin-form-group-full">
+                            <label for="settings-tagline">Tagline / Mission phrase</label>
+                            <input type="text" id="settings-tagline" class="admin-input-control" required>
+                        </div>
+                        <div class="admin-form-group-full">
+                            <label for="settings-address">Office Address</label>
+                            <input type="text" id="settings-address" class="admin-input-control" required>
+                        </div>
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label for="settings-phone">Corporate Phone</label>
+                                <input type="text" id="settings-phone" class="admin-input-control" required>
+                            </div>
+                            <div class="admin-form-group">
+                                <label for="settings-email">Corporate Email</label>
+                                <input type="email" id="settings-email" class="admin-input-control" required>
+                            </div>
+                        </div>
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label for="settings-fb">Facebook URL</label>
+                                <input type="url" id="settings-fb" class="admin-input-control">
+                            </div>
+                            <div class="admin-form-group">
+                                <label for="settings-li">LinkedIn URL</label>
+                                <input type="url" id="settings-li" class="admin-input-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions-footer">
+                            <button type="submit" class="action-btn action-btn-primary" style="padding: 12px 24px;"><i data-lucide="check"></i> Save Settings Configuration</button>
+                        </div>
+                    </form>
+                    
+                    <div style="border-top: 1px dashed var(--admin-border); margin-top: 40px; padding-top: 30px;">
+                        <h3 style="color: #B91C1C; margin-bottom: 12px;">Seed Database Operations</h3>
+                        <p style="font-size: 13px; color: var(--admin-text-secondary); margin-bottom: 20px;">Populate Supabase tables with multi-site datasets.</p>
+                        <button class="action-btn" style="border-color: #B91C1C; color: #B91C1C;" onclick="triggerSeeding()">
+                            <i data-lucide="database-backup"></i> Seed Live Database Tables
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ==========================================
+       MODALS FOR CRUD
+       ========================================== -->
+
+    <!-- Product CRUD Modal -->
+    <div class="admin-modal-overlay" id="product-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 id="product-modal-title">Create Entry</h3>
+                <button class="admin-modal-close" onclick="closeProductModal()">&times;</button>
+            </div>
+            <form id="product-form" onsubmit="handleProductSubmit(event)">
+                <input type="hidden" id="product-id">
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="product-title">Item Name / Title</label>
+                        <input type="text" id="product-title" class="admin-input-control" required placeholder="e.g. AP Calculus AB">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="product-category">Category</label>
+                        <select id="product-category" class="admin-input-control" required></select>
+                    </div>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label for="product-image">Product Image</label>
+                    <div style="display:flex; gap:10px; margin-bottom:8px;">
+                        <input type="file" id="product-image-file" accept="image/*" style="display:none;">
+                        <button type="button" class="action-btn" onclick="document.getElementById('product-image-file').click()" style="padding:10px 14px; display:inline-flex; align-items:center; gap:6px;">
+                            <i data-lucide="upload" style="width:14px; height:14px;"></i> Upload File
+                        </button>
+                        <input type="text" id="product-image" class="admin-input-control" placeholder="Or paste image URL..." style="margin-bottom:0; flex-grow:1;">
+                    </div>
+                    <div id="product-image-preview-container" style="display:none; margin-bottom:10px; position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid var(--admin-border); background:#F8FAFC; height:140px; max-width:240px;">
+                        <img id="product-image-preview" src="" style="width:100%; height:100%; object-fit:cover;">
+                        <button type="button" onclick="clearAdminUpload('product-image')" style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px;">&times;</button>
+                    </div>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label for="product-desc">Short Description</label>
+                    <textarea id="product-desc" class="admin-input-control" required placeholder="Write a short summary..."></textarea>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label for="product-features">Key Bullet Points (One per line)</label>
+                    <textarea id="product-features" class="admin-input-control" placeholder="Features or objectives..."></textarea>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label>Specifications (JSON format)</label>
+                    <textarea id="product-specs" class="admin-input-control" style="font-family: monospace;" placeholder='{"Prerequisite": "Algebra"}'></textarea>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label for="product-industries">Domain Keywords (Comma separated)</label>
+                    <input type="text" id="product-industries" class="admin-input-control" placeholder="STEM, College Prep">
+                </div>
+
+                <div class="form-actions-footer">
+                    <button type="button" class="action-btn" onclick="closeProductModal()">Cancel</button>
+                    <button type="submit" class="action-btn action-btn-primary">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Document Catalog Upload Modal -->
+    <div class="admin-modal-overlay" id="document-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 id="document-modal-title">Upload PDF</h3>
+                <button class="admin-modal-close" onclick="closeDocumentModal()">&times;</button>
+            </div>
+            <form id="document-form" onsubmit="handleDocumentSubmit(event)">
+                <input type="hidden" id="document-id">
+                <input type="hidden" id="document-parent-id">
+                
+                <div class="admin-form-group-full">
+                    <label for="document-title">Catalog / File Title</label>
+                    <input type="text" id="document-title" class="admin-input-control" required placeholder="e.g. Admission Forms Guide">
+                </div>
+
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="document-type">Document Type</label>
+                        <select id="document-type" class="admin-input-control" required>
+                            <option value="Catalog">Catalog</option>
+                            <option value="Brochure">Brochure</option>
+                            <option value="Technical Bulletin">Technical Bulletin</option>
+                            <option value="Price List">Price List</option>
+                            <option value="Marketing Brochure">Marketing Brochure</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group" id="document-version-group">
+                        <label for="document-version">Starting Version</label>
+                        <input type="number" id="document-version" class="admin-input-control" value="1" min="1" required>
+                    </div>
+                </div>
+
+                <div class="admin-form-group-full">
+                    <label for="document-url">PDF File</label>
+                    <div style="display:flex; gap:10px; margin-bottom:8px;">
+                        <input type="file" id="document-url-file" accept="application/pdf" style="display:none;">
+                        <button type="button" class="action-btn" onclick="document.getElementById('document-url-file').click()" style="padding:10px 14px; display:inline-flex; align-items:center; gap:6px;">
+                            <i data-lucide="upload" style="width:14px; height:14px;"></i> Upload PDF
+                        </button>
+                        <input type="text" id="document-url" class="admin-input-control" required placeholder="Or paste PDF file URL..." style="margin-bottom:0; flex-grow:1;">
+                    </div>
+                    <div id="document-url-preview-container" style="display:none; margin-bottom:10px; padding:10px; border-radius:var(--radius); border:1px solid var(--admin-border); background:#F8FAFC; align-items:center; gap:10px; justify-content:space-between; max-width:360px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i data-lucide="file-text" style="color:#EF4444; width:16px; height:16px;"></i>
+                            <span id="document-url-preview-name" style="font-size:13px; font-weight:500; color:var(--admin-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:240px;">Selected PDF</span>
+                        </div>
+                        <button type="button" onclick="clearAdminUpload('document-url')" style="background:none; border:none; color:var(--admin-text-secondary); cursor:pointer; font-size:16px;">&times;</button>
+                    </div>
+                </div>
+
+                <div class="form-actions-footer">
+                    <button type="button" class="action-btn" onclick="closeDocumentModal()">Cancel</button>
+                    <button type="submit" class="action-btn action-btn-primary">Save Document</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Marketing CRUD Modal -->
+    <div class="admin-modal-overlay" id="marketing-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 id="marketing-modal-title">Create Marketing Resource</h3>
+                <button class="admin-modal-close" onclick="closeMarketingModal()">&times;</button>
+            </div>
+            <form id="marketing-form" onsubmit="handleMarketingSubmit(event)">
+                <input type="hidden" id="marketing-id">
+                
+                <div class="admin-form-group-full">
+                    <label for="marketing-title">Resource Title</label>
+                    <input type="text" id="marketing-title" class="admin-input-control" required>
+                </div>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="marketing-type">Resource Type</label>
+                        <select id="marketing-type" class="admin-input-control" required>
+                            <option value="Brochure">Brochure</option>
+                            <option value="Flyer">Flyer</option>
+                            <option value="Presentation">Presentation</option>
+                            <option value="Video">Video</option>
+                            <option value="Image">Image</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="marketing-url">File/Video URL</label>
+                        <div style="display:flex; gap:10px; margin-bottom:8px;">
+                            <input type="file" id="marketing-url-file" accept="image/*,video/*,application/pdf" style="display:none;">
+                            <button type="button" class="action-btn" onclick="document.getElementById('marketing-url-file').click()" style="padding:10px 14px; display:inline-flex; align-items:center; gap:6px;">
+                                <i data-lucide="upload" style="width:14px; height:14px;"></i> Upload
+                            </button>
+                            <input type="text" id="marketing-url" class="admin-input-control" required placeholder="Or paste URL..." style="margin-bottom:0; flex-grow:1;">
+                        </div>
+                        <div id="marketing-url-preview-container" style="display:none; margin-top:8px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--admin-border); background:#F8FAFC; position:relative; max-width:360px; padding:10px;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i data-lucide="file" id="marketing-preview-icon" style="color:var(--admin-accent); width:16px; height:16px;"></i>
+                                <span id="marketing-url-preview-name" style="font-size:13px; font-weight:500; color:var(--admin-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:240px;">Selected File</span>
+                            </div>
+                            <button type="button" onclick="clearAdminUpload('marketing-url')" style="position:absolute; top:8px; right:8px; background:none; border:none; color:var(--admin-text-secondary); cursor:pointer; font-size:16px;">&times;</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label for="marketing-desc">Brief Description</label>
+                    <textarea id="marketing-desc" class="admin-input-control"></textarea>
+                </div>
+
+                <div class="form-actions-footer">
+                    <button type="button" class="action-btn" onclick="closeMarketingModal()">Cancel</button>
+                    <button type="submit" class="action-btn action-btn-primary">Save Resource</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Global Partners Modal -->
+    <div class="admin-modal-overlay" id="partner-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 id="partner-modal-title">Add Partner / Affiliation</h3>
+                <button class="admin-modal-close" onclick="closePartnerModal()">&times;</button>
+            </div>
+            <form id="partner-form" onsubmit="handlePartnerSubmit(event)">
+                <input type="hidden" id="partner-id">
+                
+                <div class="admin-form-group-full">
+                    <label for="partner-name">Distributor / Partner Name</label>
+                    <input type="text" id="partner-name" class="admin-input-control" required>
+                </div>
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="partner-country">Country location</label>
+                        <input type="text" id="partner-country" class="admin-input-control" required>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="partner-link">Website Link</label>
+                        <input type="url" id="partner-link" class="admin-input-control">
+                    </div>
+                </div>
+
+                <div class="form-actions-footer">
+                    <button type="button" class="action-btn" onclick="closePartnerModal()">Cancel</button>
+                    <button type="submit" class="action-btn action-btn-primary">Save Partner</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Document Replacement versioning Modal -->
+    <div class="admin-modal-overlay" id="replace-doc-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3>Replace Document File (Versioning)</h3>
+                <button class="admin-modal-close" onclick="closeReplaceDocModal()">&times;</button>
+            </div>
+            <form id="replace-doc-form" onsubmit="handleReplaceDocSubmit(event)">
+                <input type="hidden" id="replace-doc-id">
+                
+                <div class="admin-form-group-full" style="background-color: var(--admin-bg); padding:16px; border-radius:var(--radius); border-left:4px solid var(--admin-accent);">
+                    <p><strong>Replacing:</strong> <span id="replace-doc-current-name">File</span></p>
+                    <p style="font-size:12px; color:var(--admin-text-secondary); margin-top:4px;">Note: Old version is archived. A new draft is auto-generated at <strong id="replace-doc-next-version">v2</strong>.</p>
+                </div>
+                
+                <div class="admin-form-group-full" style="margin-top:20px;">
+                    <label for="replace-doc-url">New File</label>
+                    <div style="display:flex; gap:10px; margin-bottom:8px;">
+                        <input type="file" id="replace-doc-url-file" accept="application/pdf" style="display:none;">
+                        <button type="button" class="action-btn" onclick="document.getElementById('replace-doc-url-file').click()" style="padding:10px 14px; display:inline-flex; align-items:center; gap:6px;">
+                            <i data-lucide="upload" style="width:14px; height:14px;"></i> Upload PDF
+                        </button>
+                        <input type="text" id="replace-doc-url" class="admin-input-control" required placeholder="Or paste file URL..." style="margin-bottom:0; flex-grow:1;">
+                    </div>
+                    <div id="replace-doc-url-preview-container" style="display:none; margin-bottom:10px; padding:10px; border-radius:var(--radius); border:1px solid var(--admin-border); background:#F8FAFC; align-items:center; gap:10px; justify-content:space-between; max-width:360px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i data-lucide="file-text" style="color:#EF4444; width:16px; height:16px;"></i>
+                            <span id="replace-doc-url-preview-name" style="font-size:13px; font-weight:500; color:var(--admin-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:240px;">Selected PDF</span>
+                        </div>
+                        <button type="button" onclick="clearAdminUpload('replace-doc-url')" style="background:none; border:none; color:var(--admin-text-secondary); cursor:pointer; font-size:16px;">&times;</button>
+                    </div>
+                </div>
+
+                <div class="form-actions-footer">
+                    <button type="button" class="action-btn" onclick="closeReplaceDocModal()">Cancel</button>
+                    <button type="submit" class="action-btn action-btn-primary">Generate New Version</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Alert Toast notifications -->
+    <div class="admin-alert-toast" id="admin-toast">
+        <span id="toast-message">Workflow logged successfully!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

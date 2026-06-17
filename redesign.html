@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnooRyze CMS | Visual Site Redesign</title>
+    
+    <!-- Lucide Icons & Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/redesign.css">
+</head>
+<body>
+    <div class="redesign-app-container">
+        
+        <!-- Left Sidebar: Configuration Controls -->
+        <aside class="redesign-sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="back-to-cms-btn">
+                    <i data-lucide="arrow-left"></i> Back to Dashboard
+                </a>
+                <h1 class="sidebar-title">Redesign Customizer</h1>
+                <p class="sidebar-subtitle">Manage appearance and content parameters dynamically</p>
+            </div>
+            
+            <!-- Tabs Bar (4 tabs) -->
+            <div class="customizer-tabs">
+                <button type="button" class="tab-btn active" data-tab="home">
+                    <i data-lucide="home"></i> Home Page
+                </button>
+                <button type="button" class="tab-btn" data-tab="header">
+                    <i data-lucide="layout-template"></i> Header
+                </button>
+                <button type="button" class="tab-btn" data-tab="footer">
+                    <i data-lucide="layout-panel-bottom"></i> Footer
+                </button>
+                <button type="button" class="tab-btn" data-tab="products">
+                    <i data-lucide="package"></i> Products
+                </button>
+            </div>
+            
+            <div class="settings-scroll-container">
+                <!-- Tab Pane 1: Home Page Settings -->
+                <form id="redesign-settings-form" class="tab-pane active" onsubmit="handleRedesignSave(event)">
+                    <!-- Section 1: Branding -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="info"></i> Company Branding</h2>
+                        <div class="form-group">
+                            <label for="redesign-company-name">Company Name</label>
+                            <input type="text" id="redesign-company-name" required placeholder="e.g. MAX-SEAL Valves & Controls">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-logo-text">Logo Text Display</label>
+                            <input type="text" id="redesign-logo-text" required placeholder="e.g. MAX-SEAL">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-tagline">Tagline / Mission</label>
+                            <input type="text" id="redesign-tagline" required placeholder="e.g. High Quality Valve Solutions">
+                        </div>
+                    </div>
+                    
+                    <!-- Section 2: Contact Info -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="map-pin"></i> Contact & Footer Details</h2>
+                        <div class="form-group">
+                            <label for="redesign-address">Office Address</label>
+                            <input type="text" id="redesign-address" required placeholder="10200 Coldwater Road">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-phone">Phone Number</label>
+                            <input type="text" id="redesign-phone" required placeholder="1-800-MAX-SEAL">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-email">Email Address</label>
+                            <input type="email" id="redesign-email" required placeholder="info@maxsealinc.com">
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Hero Content -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="layout"></i> Hero Content</h2>
+                        <div class="form-group">
+                            <label for="redesign-hero-heading">Hero Title / Heading</label>
+                            <input type="text" id="redesign-hero-heading" required placeholder="e.g. Engineering Premium Valves">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-hero-subheading">Hero Subheading Text</label>
+                            <textarea id="redesign-hero-subheading" required placeholder="e.g. Over 20 years of manufacturing excellence..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-hero-image">Hero Background Image</label>
+                            <div style="display:flex; gap:10px; margin-bottom:8px;">
+                                <input type="file" id="redesign-hero-image-file" accept="image/*" style="display:none;">
+                                <button type="button" class="upload-trigger-btn" onclick="document.getElementById('redesign-hero-image-file').click()" style="padding:8px 12px; background:var(--sidebar-bg); border:1px solid var(--input-border); border-radius:var(--radius-sm); color:var(--text-main); font-size:12px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                                    <i data-lucide="upload" style="width:14px; height:14px;"></i> Upload Image
+                                </button>
+                                <input type="text" id="redesign-hero-image" required placeholder="Or paste image URL..." style="flex-grow:1; margin-bottom:0; padding:10px 14px; background-color:var(--input-bg); border:1px solid var(--input-border); border-radius:var(--radius-sm); color:var(--text-main); font-family:var(--font-stack); font-size:14px; outline:none;">
+                            </div>
+                            <div id="redesign-hero-image-preview-container" style="display:none; margin-bottom:10px; position:relative; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border-color); background:var(--sidebar-bg); height:120px;">
+                                <img id="redesign-hero-image-preview" src="" style="width:100%; height:100%; object-fit:cover;">
+                                <button type="button" onclick="clearUpload('redesign-hero-image')" style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px;">&times;</button>
+                            </div>
+                            <div class="preset-images-container">
+                                <span class="preset-label">Quick Presets:</span>
+                                <div class="presets-row" id="hero-presets-row">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 4: Color Styling -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="palette"></i> Theme Palette</h2>
+                        <p class="section-desc">Select custom theme colors to adjust the look instantly.</p>
+                        
+                        <div class="color-picker-grid">
+                            <div class="color-picker-item">
+                                <label for="redesign-color-primary">Primary</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="redesign-color-primary">
+                                    <input type="text" id="redesign-color-primary-text" class="color-hex-text" pattern="^#([A-Fa-f0-9]{6})$" placeholder="#000000">
+                                </div>
+                            </div>
+                            <div class="color-picker-item">
+                                <label for="redesign-color-secondary">Secondary</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="redesign-color-secondary">
+                                    <input type="text" id="redesign-color-secondary-text" class="color-hex-text" pattern="^#([A-Fa-f0-9]{6})$" placeholder="#000000">
+                                </div>
+                            </div>
+                            <div class="color-picker-item">
+                                <label for="redesign-color-accent">Accent</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="redesign-color-accent">
+                                    <input type="text" id="redesign-color-accent-text" class="color-hex-text" pattern="^#([A-Fa-f0-9]{6})$" placeholder="#000000">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Footer -->
+                    <div class="sidebar-form-actions">
+                        <button type="submit" class="save-publish-btn">
+                            <i data-lucide="cloud-lightning"></i> Save & Publish Changes
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Tab Pane: Header & Nav -->
+                <form id="redesign-header-form" class="tab-pane" onsubmit="handleHeaderSave(event)">
+                    <!-- Logo Section -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="image"></i> Logo</h2>
+                        <div class="form-group">
+                            <label>Logo Image</label>
+                            <div style="display:flex; gap:10px; margin-bottom:8px;">
+                                <input type="file" id="redesign-logo-image-file" accept="image/*" style="display:none;">
+                                <button type="button" class="upload-trigger-btn" onclick="document.getElementById('redesign-logo-image-file').click()">
+                                    <i data-lucide="upload" style="width:14px;height:14px;"></i> Upload Logo
+                                </button>
+                            </div>
+                            <div id="redesign-logo-image-preview-container" style="display:none; margin-bottom:10px; position:relative; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border-color); background:#fff; height:80px;">
+                                <img id="redesign-logo-image-preview" src="" style="height:100%; width:auto; object-fit:contain; display:block; margin:auto;">
+                                <button type="button" onclick="clearUpload('redesign-logo-image')" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:11px;">×</button>
+                            </div>
+                            <input type="hidden" id="redesign-logo-image">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-logo-text-header">Logo Text (if no image)</label>
+                            <input type="text" id="redesign-logo-text-header" placeholder="e.g. MAX-SEAL">
+                        </div>
+                    </div>
+
+                    <!-- Navigation Links -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="menu"></i> Navigation Labels</h2>
+                        <p class="section-desc">Customize the label of each nav menu item.</p>
+                        <div class="form-group">
+                            <label for="redesign-nav-1">Nav 1 Label</label>
+                            <input type="text" id="redesign-nav-1" placeholder="Home">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-nav-2">Nav 2 Label</label>
+                            <input type="text" id="redesign-nav-2" placeholder="Products">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-nav-3">Nav 3 Label</label>
+                            <input type="text" id="redesign-nav-3" placeholder="Catalog">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-nav-4">Nav 4 Label</label>
+                            <input type="text" id="redesign-nav-4" placeholder="Resources">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-nav-5">Nav 5 Label</label>
+                            <input type="text" id="redesign-nav-5" placeholder="Distributors">
+                        </div>
+                    </div>
+
+                    <!-- Header CTA -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="phone"></i> Header CTA Button</h2>
+                        <div class="form-group">
+                            <label for="redesign-header-cta-text">Button Label</label>
+                            <input type="text" id="redesign-header-cta-text" placeholder="e.g. 1-800-MAX-SEAL">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-header-cta-href">Phone or Link</label>
+                            <input type="text" id="redesign-header-cta-href" placeholder="tel:+18006297325">
+                        </div>
+                    </div>
+
+                    <div class="sidebar-form-actions">
+                        <button type="submit" class="save-publish-btn">
+                            <i data-lucide="cloud-lightning"></i> Save Header Settings
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Tab Pane: Footer -->
+                <form id="redesign-footer-form" class="tab-pane" onsubmit="handleFooterSave(event)">
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="building-2"></i> Company Info</h2>
+                        <div class="form-group">
+                            <label for="redesign-footer-company">Company Full Name</label>
+                            <input type="text" id="redesign-footer-company" placeholder="e.g. MAX-SEAL Butterfly Valves &amp; Controls">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-tagline">Footer Tagline / Description</label>
+                            <textarea id="redesign-footer-tagline" placeholder="Short company description for footer..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-copyright">Copyright Text</label>
+                            <input type="text" id="redesign-footer-copyright" placeholder="e.g. Maxseal Inc Valve &amp; Control">
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="map-pin"></i> Contact Details</h2>
+                        <div class="form-group">
+                            <label for="redesign-footer-address">Office Address</label>
+                            <input type="text" id="redesign-footer-address" placeholder="4815 West 5th Street, Lumberton NC">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-phone">Phone Number</label>
+                            <input type="text" id="redesign-footer-phone" placeholder="910-738-2866">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-fax">Fax Number</label>
+                            <input type="text" id="redesign-footer-fax" placeholder="910-739-1733">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-email">Email Address</label>
+                            <input type="email" id="redesign-footer-email" placeholder="sales@iv-controls.com">
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="share-2"></i> Social Links</h2>
+                        <div class="form-group">
+                            <label for="redesign-footer-facebook">Facebook URL</label>
+                            <input type="url" id="redesign-footer-facebook" placeholder="https://facebook.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-twitter">Twitter / X URL</label>
+                            <input type="url" id="redesign-footer-twitter" placeholder="https://twitter.com/maxsealinc">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-linkedin">LinkedIn URL</label>
+                            <input type="url" id="redesign-footer-linkedin" placeholder="https://linkedin.com/company/...">
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="link"></i> Footer Quick Links</h2>
+                        <p class="section-desc">Labels for footer navigation links.</p>
+                        <div class="form-group">
+                            <label for="redesign-footer-link-1">Link 1 Label</label>
+                            <input type="text" id="redesign-footer-link-1" placeholder="e.g. Home">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-link-2">Link 2 Label</label>
+                            <input type="text" id="redesign-footer-link-2" placeholder="e.g. Products">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-link-3">Link 3 Label</label>
+                            <input type="text" id="redesign-footer-link-3" placeholder="e.g. Catalogs">
+                        </div>
+                        <div class="form-group">
+                            <label for="redesign-footer-link-4">Link 4 Label</label>
+                            <input type="text" id="redesign-footer-link-4" placeholder="e.g. Distributors">
+                        </div>
+                    </div>
+
+                    <div class="sidebar-form-actions">
+                        <button type="submit" class="save-publish-btn">
+                            <i data-lucide="cloud-lightning"></i> Save & Publish Footer
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Tab Pane 2: Products / Services -->
+                <form id="redesign-product-form" class="tab-pane" onsubmit="handleRedesignProductSave(event)">
+                    <!-- Select Product Section -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="search"></i> Select Item to Edit</h2>
+                        <p class="section-desc">Choose a page item to modify details, or configure a new entry.</p>
+                        <div class="form-group">
+                            <label for="redesign-product-select">Active Item</label>
+                            <select id="redesign-product-select" class="redesign-select-control" style="width: 100%; padding: 10px 14px; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-sm); color: var(--text-main); font-family: var(--font-stack); outline: none; cursor: pointer; font-size: 14px;">
+                                <option value="new">-- Create New Entry --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Product Details Section -->
+                    <div class="settings-section">
+                        <h2 class="section-title"><i data-lucide="edit-3"></i> Item Details</h2>
+                        <input type="hidden" id="redesign-prod-id">
+                        
+                        <div class="form-group">
+                            <label for="redesign-prod-title">Item Title / Name</label>
+                            <input type="text" id="redesign-prod-title" required placeholder="e.g. AP Calculus AB Course">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="redesign-prod-category">Category</label>
+                            <select id="redesign-prod-category" class="redesign-select-control" style="width: 100%; padding: 10px 14px; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-sm); color: var(--text-main); font-family: var(--font-stack); outline: none; cursor: pointer; font-size: 14px;">
+                                <!-- Populated dynamically by JS -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="redesign-prod-image">Item Image</label>
+                            <div style="display:flex; gap:10px; margin-bottom:8px;">
+                                <input type="file" id="redesign-prod-image-file" accept="image/*" style="display:none;">
+                                <button type="button" class="upload-trigger-btn" onclick="document.getElementById('redesign-prod-image-file').click()" style="padding:8px 12px; background:var(--sidebar-bg); border:1px solid var(--input-border); border-radius:var(--radius-sm); color:var(--text-main); font-size:12px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                                    <i data-lucide="upload" style="width:14px; height:14px;"></i> Upload Image
+                                </button>
+                                <input type="text" id="redesign-prod-image" placeholder="Or paste image URL..." style="flex-grow:1; margin-bottom:0; padding:10px 14px; background-color:var(--input-bg); border:1px solid var(--input-border); border-radius:var(--radius-sm); color:var(--text-main); font-family:var(--font-stack); font-size:14px; outline:none;">
+                            </div>
+                            <div id="redesign-prod-image-preview-container" style="display:none; margin-bottom:10px; position:relative; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border-color); background:var(--sidebar-bg); height:120px;">
+                                <img id="redesign-prod-image-preview" src="" style="width:100%; height:100%; object-fit:cover;">
+                                <button type="button" onclick="clearUpload('redesign-prod-image')" style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px;">&times;</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="redesign-prod-desc">Short Description</label>
+                            <textarea id="redesign-prod-desc" required placeholder="Write a short summary..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="redesign-prod-features">Highlights / Key Points (One per line)</label>
+                            <textarea id="redesign-prod-features" placeholder="Bullet Highlight 1&#10;Bullet Highlight 2" style="height:100px;"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="redesign-prod-specs">Specifications (JSON Format)</label>
+                            <textarea id="redesign-prod-specs" placeholder='{"Size Range": "3\" to 48\"", "Rating": "Class 150"}' style="height:120px; font-family:monospace; font-size:12px;"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="redesign-prod-industries">Domain Keywords (Comma separated)</label>
+                            <input type="text" id="redesign-prod-industries" placeholder="Oil & Gas, Chemical">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="redesign-prod-pdf">Linked Brochure PDF</label>
+                            <!-- Direct PDF upload -->
+                            <div style="display:flex; gap:10px; margin-bottom:8px; align-items:center;">
+                                <input type="file" id="redesign-prod-pdf-file" accept="application/pdf" style="display:none;">
+                                <button type="button" class="upload-trigger-btn" onclick="document.getElementById('redesign-prod-pdf-file').click()">
+                                    <i data-lucide="file-up" style="width:14px; height:14px;"></i> Upload PDF
+                                </button>
+                                <span style="font-size:11px; color:var(--text-muted);">or choose from library below</span>
+                            </div>
+                            <!-- Uploaded PDF badge -->
+                            <div id="redesign-prod-pdf-badge" style="display:none; align-items:center; gap:8px; padding:9px 12px; background:rgba(30,41,59,0.6); border:1px solid var(--border-color); border-radius:var(--radius-sm); margin-bottom:8px;">
+                                <i data-lucide="file-text" style="width:16px; height:16px; color:var(--accent-color); flex-shrink:0;"></i>
+                                <span id="redesign-prod-pdf-badge-name" style="font-size:12px; color:var(--text-muted); flex-grow:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">document.pdf</span>
+                                <button type="button" onclick="clearPdfUpload()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; padding:2px; display:flex; align-items:center;"><i data-lucide="x" style="width:14px; height:14px;"></i></button>
+                            </div>
+                            <!-- Library selector (existing docs) -->
+                            <select id="redesign-prod-pdf" class="redesign-select-control" style="width: 100%; padding: 10px 14px; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-sm); color: var(--text-main); font-family: var(--font-stack); outline: none; cursor: pointer; font-size: 14px;">
+                                <option value="">-- None --</option>
+                            </select>
+                            <p style="font-size:11px; color:var(--text-muted); margin-top:5px;">Upload a new PDF directly or associate an existing brochure from the Document Library.</p>
+                        </div>
+                    </div>
+
+                    <!-- Product Action Footer -->
+                    <div class="sidebar-form-actions">
+                        <button type="submit" class="save-publish-btn" style="background-color: var(--accent-color); color: var(--primary-bg);">
+                            <i data-lucide="check"></i> Save & Publish Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </aside>
+        
+        <!-- Right Panel: Live Simulated Browser Viewport -->
+        <main class="preview-viewport-panel">
+            <header class="browser-chrome">
+                <div class="chrome-dots">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                </div>
+                
+                <div class="chrome-address-bar">
+                    <i data-lucide="lock" class="lock-icon"></i>
+                    <span id="chrome-address-url">http://localhost:8080/maxseal.html</span>
+                    <button class="chrome-action-btn" onclick="reloadPreview()" title="Reload Preview">
+                        <i data-lucide="rotate-cw"></i>
+                    </button>
+                </div>
+
+                <div class="chrome-viewport-toggles">
+                    <button class="viewport-toggle active" data-mode="desktop" title="Desktop View">
+                        <i data-lucide="monitor"></i>
+                    </button>
+                    <button class="viewport-toggle" data-mode="tablet" title="Tablet View">
+                        <i data-lucide="tablet"></i>
+                    </button>
+                    <button class="viewport-toggle" data-mode="mobile" title="Mobile View">
+                        <i data-lucide="smartphone"></i>
+                    </button>
+                </div>
+            </header>
+            
+            <div class="iframe-container" id="preview-iframe-wrapper">
+                <iframe id="preview-frame" src="about:blank"></iframe>
+            </div>
+        </main>
+        
+    </div>
+
+    <!-- Alert Toast notifications -->
+    <div class="admin-alert-toast" id="redesign-toast">
+        <span id="redesign-toast-message">Configuration updated successfully!</span>
+    </div>
+
+    <!-- CDNs -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/redesign.js"></script>
+</body>
+</html>

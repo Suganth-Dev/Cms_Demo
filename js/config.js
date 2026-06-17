@@ -1,0 +1,3 @@
+// Supabase Connection Configuration
+const SUPABASE_URL = "https://lvvyicxypktxodyukjaj.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2dnlpY3h5cGt0eG9keXVramFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMjg1NzIsImV4cCI6MjA5NjgwNDU3Mn0.QzJAW_P2LA8Cvh14Zib_pNawm0tGguHVtHtpPrMVevw";

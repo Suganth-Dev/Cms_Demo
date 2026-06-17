@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC International School | Academic Excellence & Leadership</title>
+    
+    <!-- Fonts & CDNs -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/school.css">
+</head>
+<body>
+    <!-- Utility Info Bar -->
+    <div class="utility-bar">
+        <div class="utility-container">
+            <span>Academic Term 2026: Admissions Open for AP & Honours Programs</span>
+            <a href="#downloads-section" class="utility-link">Student Handbooks</a>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="site-logo">
+                <span class="logo-bold" id="logo-text">ABC School</span>
+                <span class="logo-sub">INTERNATIONAL ACADEMY</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#hero-section" class="nav-link">Home</a>
+                <a href="#courses-section" class="nav-link">Curriculum</a>
+                <a href="#downloads-section" class="nav-link">Handbooks</a>
+                <a href="#marketing-section" class="nav-link">Campus Life</a>
+                <a href="#partners-section" class="nav-link">Affiliations</a>
+            </nav>
+            
+            <div class="header-cta">
+                <a href="tel:+15552227245" class="phone-link" id="header-phone">
+                    <i data-lucide="graduation-cap"></i> Enroll: <span id="phone-text">1-555-ABC-SCHL</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero-section">
+        <div class="hero-bg-overlay" id="hero-overlay"></div>
+        <div class="hero-container">
+            <span class="hero-tagline" id="hero-tagline-badge">EMPOWERING STUDENTS FOR THE FUTURE</span>
+            <h1 class="hero-title" id="hero-title">Empowering Students for Global Academic Leadership</h1>
+            <p class="hero-subtitle" id="hero-subtitle">Offering a dynamic curriculum, elite AP courses, state-of-the-art laboratory spaces, and a supportive environment for future innovators.</p>
+            <div class="hero-actions">
+                <a href="#courses-section" class="btn btn-primary" id="btn-primary-cta">View Curriculum</a>
+                <a href="#downloads-section" class="btn btn-outline" id="btn-outline-cta">Download Prospectus</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-number">98%</span>
+                <span class="stat-label">University Placement</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">12:1</span>
+                <span class="stat-label">Student-Teacher Ratio</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">AP Courses</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Holistic Growth</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses & Curriculum Section -->
+    <section class="courses-section" id="courses-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Our Academic Offerings</h2>
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all">All Fields</button>
+                    <button class="filter-btn" data-filter="Mathematics">Mathematics</button>
+                    <button class="filter-btn" data-filter="Science & Technology">Science & Tech</button>
+                    <button class="filter-btn" data-filter="Humanities">Humanities</button>
+                </div>
+            </div>
+            
+            <div class="courses-grid" id="courses-grid-container">
+                <!-- Populated Dynamically -->
+                <p class="loading-placeholder">Loading academic catalog...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Handbooks Section -->
+    <section class="downloads-section" id="downloads-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Publications & Student Handbooks</h2>
+                <p class="section-subtitle">Read up-to-date parent guidelines, school rules, bus routes, and semester schedules.</p>
+            </div>
+            
+            <div class="downloads-table-wrapper">
+                <table class="downloads-table">
+                    <thead>
+                        <tr>
+                            <th>Handbook Title</th>
+                            <th>Category</th>
+                            <th>Version</th>
+                            <th>Last Updated</th>
+                            <th>Format</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="downloads-table-body">
+                        <!-- Populated Dynamically -->
+                        <tr><td colspan="6" style="text-align:center;">Loading handbooks...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campus Life Gallery/Videos -->
+    <section class="marketing-section" id="marketing-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Vibrant Campus Experiences</h2>
+                <p class="section-subtitle">Take a peek inside our science exhibitions, sports fields, and interactive project weeks.</p>
+            </div>
+            
+            <div class="marketing-grid" id="marketing-container">
+                <!-- Populated Dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Academic Affiliations -->
+    <section class="partners-section" id="partners-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>International Affiliations & Councils</h2>
+                <p class="section-subtitle">We partner with premier education boards to provide globally recognized academic certifications.</p>
+            </div>
+            
+            <div class="partners-grid" id="partners-grid-container">
+                <!-- Populated Dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3 id="footer-company-name">ABC International School</h3>
+                <p class="footer-tagline" id="footer-tagline">Nurturing curiosity and modeling excellence in secondary and higher academic programs.</p>
+                <div class="social-links" id="footer-social-links">
+                    <!-- Social buttons populated by JS -->
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Academy Sitemap</h4>
+                <ul>
+                    <li><a href="#hero-section">Home</a></li>
+                    <li><a href="#courses-section">Curriculum</a></li>
+                    <li><a href="#downloads-section">Handbooks</a></li>
+                    <li><a href="#partners-section">Affiliations</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-contact">
+                <h4>Admissions Office</h4>
+                <p id="footer-address"><i data-lucide="map-pin"></i> 742 Evergreen Terrace, Springfield, IL 62704</p>
+                <p id="footer-phone-full"><i data-lucide="phone"></i> 1-555-ABC-SCHL (222-7245)</p>
+                <p id="footer-email"><i data-lucide="mail"></i> admissions@abcschool.edu</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <p>&copy; 2026 InnooRyze Mini CMS. School layouts, colors, and documents are synchronized from Supabase.</p>
+                <p>System State: <span class="badge-status-online">Online / Connected</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Course Detail modal popup -->
+    <div class="product-detail-modal" id="product-detail-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="closeProductDetailModal()">&times;</button>
+            <div class="modal-layout">
+                <div class="modal-media">
+                    <img id="modal-product-img" src="" alt="Course image">
+                </div>
+                <div class="modal-content">
+                    <span class="modal-category" id="modal-product-category">Category</span>
+                    <h3 class="modal-title" id="modal-product-title">Course Name</h3>
+                    <p class="modal-desc" id="modal-product-desc">Short description of the course content.</p>
+                    
+                    <div class="specs-block">
+                        <h4>Course Parameters</h4>
+                        <div class="specs-grid" id="modal-product-specs">
+                            <!-- Populated Dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="features-block">
+                        <h4>Syllabus Highlights</h4>
+                        <ul id="modal-product-features">
+                            <!-- Populated Dynamically -->
+                        </ul>
+                    </div>
+
+                    <div class="industries-block">
+                        <h4>Applicable Career Paths</h4>
+                        <div class="industries-tags" id="modal-product-industries">
+                            <!-- Populated Dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts CDNs -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/school.js"></script>
+</body>
+</html>
