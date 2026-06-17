@@ -18,8 +18,10 @@ let cachePartners = [];
 document.addEventListener('DOMContentLoaded', () => {
     initAdminApp();
 });
-
 function initAdminApp() {
+    // 0. Initialize premium login background
+    initLoginCanvasBackground();
+
     // 1. Initialise Lucide icons
     lucide.createIcons();
 
@@ -46,10 +48,21 @@ function initAdminApp() {
     // 4. Bind Tenant Context Selector Change
     const siteSelect = document.getElementById('admin-site-context');
     if (siteSelect) {
-        siteSelect.addEventListener('change', (e) => {
+        siteSelect.addEventListener('change', async (e) => {
             currentSiteSlug = e.target.value;
             showToast(`Switched active context to: ${currentSiteSlug.toUpperCase()}`);
             
+            // Auto-seed if database settings are empty for this tenant
+            try {
+                const settingsObj = await getSettings(currentSiteSlug);
+                if (!settingsObj) {
+                    console.log(`Auto-seeding empty tenant database for: ${currentSiteSlug}...`);
+                    await seedDatabaseIfEmpty();
+                }
+            } catch (err) {
+                console.warn("Seeding check on context change failed:", err);
+            }
+
             // Re-render active section
             const activeLi = document.querySelector('#sidebar-menu-links li.active');
             if (activeLi) {
@@ -67,20 +80,49 @@ function initAdminApp() {
 // AUTHENTICATION CONTROLS
 // ==========================================
 
-function handleAdminLogin(e) {
+async function handleAdminLogin(e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
-    const role = document.getElementById('login-role').value;
+    const password = document.getElementById('login-password').value;
     
-    currentUser.email = email;
-    currentUser.role = role;
-    
-    // Save to session
-    localStorage.setItem('cms_role', role);
-    localStorage.setItem('cms_email', email);
-    
-    showToast(`Logged in successfully as ${role}`);
-    showDashboard();
+    const submitBtn = document.getElementById('login-submit-btn') || e.target.querySelector('button[type="submit"]');
+    let originalHtml = '';
+    if (submitBtn) {
+        originalHtml = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        const btnText = submitBtn.querySelector('.lf-btn-text');
+        if (btnText) {
+            btnText.textContent = "Authenticating...";
+        } else {
+            submitBtn.textContent = "Authenticating...";
+        }
+    }
+
+    try {
+        const authRes = await validateAdminCredentials(email, password);
+        if (authRes.success) {
+            const user = authRes.user;
+            currentUser.email = user.email;
+            currentUser.role = user.role;
+            
+            // Save to session
+            localStorage.setItem('cms_role', user.role);
+            localStorage.setItem('cms_email', user.email);
+            
+            showToast(`Logged in successfully as ${user.role}`);
+            await showDashboard();
+        } else {
+            showToast(authRes.message, 'error');
+        }
+    } catch (err) {
+        console.error("Login failure:", err);
+        showToast("Authentication service failed.", 'error');
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalHtml;
+        }
+    }
 }
 
 function handleAdminLogout() {
@@ -166,6 +208,8 @@ function updateLaunchRedesignButtons() {
         htmlFile = 'school.html';
     } else if (currentSiteSlug === 'hospital') {
         htmlFile = 'hospital.html';
+    } else if (currentSiteSlug === 'agree') {
+        htmlFile = 'agree.html';
     }
     
     if (launchBtn) {
@@ -415,6 +459,13 @@ function openProductModal(id = null) {
             <option value="Pediatric Care">Pediatric Care</option>
             <option value="Neurology Specialty">Neurology Specialty</option>
             <option value="Oncology Care">Oncology Care</option>
+        `;
+    } else if (currentSiteSlug === 'agree') {
+        categorySelect.innerHTML = `
+            <option value="Organic Vegetables">Organic Vegetables</option>
+            <option value="Wholesale Grains">Wholesale Grains</option>
+            <option value="Seasonal Fruits">Seasonal Fruits</option>
+            <option value="Farming Equipment">Farming Equipment</option>
         `;
     } else {
         categorySelect.innerHTML = `
@@ -998,6 +1049,8 @@ async function handleSettingsSave(e) {
         primary = "#1B4332"; secondary = "#2D6A4F"; accent = "#D4AF37";
     } else if (currentSiteSlug === 'hospital') {
         primary = "#0D9488"; secondary = "#0F766E"; accent = "#38BDF8";
+    } else if (currentSiteSlug === 'agree') {
+        primary = "#15803d"; secondary = "#166534"; accent = "#f59e0b";
     }
 
     const settingsObj = {
@@ -1135,3 +1188,694 @@ window.clearAdminUpload = function(textInputId) {
     if (textInput) textInput.value = '';
     hideAdminUploadPreview(textInputId);
 };
+
+// ==========================================
+// 3D MULTI-TENANT CMS GRAPH ANIMATION
+// ==========================================
+function initLoginCanvasBackground() {
+    const canvas = document.getElementById('login-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = canvas.offsetWidth;
+    let height = canvas.height = canvas.offsetHeight;
+
+    function hexToRgba(hex, alpha) {
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        const fullHex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(fullHex);
+        return result 
+            ? `rgba(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}, ${alpha})`
+            : `rgba(34, 211, 238, ${alpha})`;
+    }
+
+    function drawRoundRect(ctx, x, y, width, height, radius, fill, stroke) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+        if (fill) ctx.fill();
+        if (stroke) ctx.stroke();
+    }
+
+    window.addEventListener('resize', () => {
+        width = canvas.width = canvas.offsetWidth;
+        height = canvas.height = canvas.offsetHeight;
+    });
+
+    // Mouse positions for parallax and hover tracking
+    let mouseX = width / 2;
+    let mouseY = height / 2;
+    let targetX = width / 2;
+    let targetY = height / 2;
+    let mouseCanvasX = -1000;
+    let mouseCanvasY = -1000;
+
+    // Drag-and-drop state
+    let draggedNode = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        const rect = canvas.getBoundingClientRect();
+        mouseCanvasX = e.clientX - rect.left;
+        mouseCanvasY = e.clientY - rect.top;
+
+        if (draggedNode && draggedNode.isDragging) {
+            let targetDragX = mouseCanvasX - dragOffsetX;
+            let targetDragY = mouseCanvasY - dragOffsetY;
+            draggedNode.currentX = Math.max(45, Math.min(width - 45, targetDragX));
+            draggedNode.currentY = Math.max(45, Math.min(height - 45, targetDragY));
+        }
+    });
+
+    window.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return; // Only left clicks
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        childNodes.forEach((node) => {
+            const dx = clickX - node.currentX;
+            const dy = clickY - node.currentY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 26) {
+                draggedNode = node;
+                node.isDragging = true;
+                node.isSnapping = false;
+                dragOffsetX = clickX - node.currentX;
+                dragOffsetY = clickY - node.currentY;
+            }
+        });
+    });
+
+    window.addEventListener('dblclick', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        childNodes.forEach((node) => {
+            const dx = clickX - node.currentX;
+            const dy = clickY - node.currentY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 26) {
+                let htmlFile = 'maxseal.html';
+                if (node.slug === 'abcschool') {
+                    htmlFile = 'school.html';
+                } else if (node.slug === 'hospital') {
+                    htmlFile = 'hospital.html';
+                } else if (node.slug === 'agree') {
+                    htmlFile = 'agree.html';
+                }
+                window.open(htmlFile, '_blank');
+            }
+        });
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (draggedNode) {
+            draggedNode.isDragging = false;
+            draggedNode.isSnapping = true;
+            draggedNode = null;
+        }
+    });
+
+    window.addEventListener('blur', () => {
+        if (draggedNode) {
+            draggedNode.isDragging = false;
+            draggedNode.isSnapping = true;
+            draggedNode = null;
+        }
+    });
+
+    // 3D Cube (CMS Core Hub) vertices in 3D space
+    const vertices = [
+        {x: -1, y: -1, z: -1},
+        {x: 1, y: -1, z: -1},
+        {x: 1, y: 1, z: -1},
+        {x: -1, y: 1, z: -1},
+        {x: -1, y: -1, z: 1},
+        {x: 1, y: -1, z: 1},
+        {x: 1, y: 1, z: 1},
+        {x: -1, y: 1, z: 1}
+    ];
+
+    const edges = [
+        [0, 1], [1, 2], [2, 3], [3, 0], // Bottom face
+        [4, 5], [5, 6], [6, 7], [7, 4], // Top face
+        [0, 4], [1, 5], [2, 6], [3, 7]  // Verticals
+    ];
+
+    // Projection function
+    function project(v, scale, cx, cy, rx, ry, rz) {
+        // Rotate X
+        let y1 = v.y * Math.cos(rx) - v.z * Math.sin(rx);
+        let z1 = v.y * Math.sin(rx) + v.z * Math.cos(rx);
+        // Rotate Y
+        let x2 = v.x * Math.cos(ry) + z1 * Math.sin(ry);
+        let z2 = -v.x * Math.sin(ry) + z1 * Math.cos(ry);
+        // Rotate Z
+        let x3 = x2 * Math.cos(rz) - y1 * Math.sin(rz);
+        let y3 = x2 * Math.sin(rz) + y1 * Math.cos(rz);
+
+        // Perspective
+        const dist = 2.5;
+        const pers = dist / (dist - z2);
+
+        return {
+            x: cx + x3 * scale * pers,
+            y: cy + y3 * scale * pers,
+            z: z2
+        };
+    }
+
+    // Client/Tenant Nodes data
+    const childNodes = [
+        {
+            name: "MAX-SEAL",
+            slug: "maxseal",
+            angleOffset: -Math.PI / 4, // Top-Left
+            color: "#22D3EE",
+            accent: "#0EA5E9",
+            badge: "Manufacturing",
+            pulse: 0,
+            hoverAlpha: 0,
+            x: 0, y: 0,
+            currentX: 0, currentY: 0,
+            isDragging: false,
+            isSnapping: false,
+            drawIcon: (cx, cy) => {
+                // Draw Gear shape
+                ctx.beginPath();
+                ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 8; i++) {
+                    ctx.rotate(Math.PI / 4);
+                    ctx.beginPath();
+                    ctx.moveTo(0, -6);
+                    ctx.lineTo(0, -10);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+        },
+        {
+            name: "ABC SCHOOL",
+            slug: "abcschool",
+            angleOffset: Math.PI / 4, // Top-Right
+            color: "#F59E0B",
+            accent: "#D4AF37",
+            badge: "Education",
+            pulse: 0,
+            hoverAlpha: 0,
+            x: 0, y: 0,
+            currentX: 0, currentY: 0,
+            isDragging: false,
+            isSnapping: false,
+            drawIcon: (cx, cy) => {
+                // Draw star-like education spark
+                ctx.beginPath();
+                ctx.moveTo(cx - 10, cy);
+                ctx.lineTo(cx, cy - 10);
+                ctx.lineTo(cx + 10, cy);
+                ctx.lineTo(cx, cy + 10);
+                ctx.closePath();
+                ctx.stroke();
+            }
+        },
+        {
+            name: "CITY HOPE HOSPITAL",
+            slug: "hospital",
+            angleOffset: Math.PI / 2, // Bottom center
+            color: "#EF4444",
+            accent: "#0D9488",
+            badge: "Healthcare",
+            pulse: 0,
+            hoverAlpha: 0,
+            x: 0, y: 0,
+            currentX: 0, currentY: 0,
+            isDragging: false,
+            isSnapping: false,
+            drawIcon: (cx, cy) => {
+                // Draw Medical Cross
+                ctx.beginPath();
+                ctx.moveTo(cx - 8, cy); ctx.lineTo(cx + 8, cy);
+                ctx.moveTo(cx, cy - 8); ctx.lineTo(cx, cy + 8);
+                ctx.stroke();
+            }
+        },
+        {
+            name: "AGREE FARMS",
+            slug: "agree",
+            angleOffset: Math.PI * 0.75, // Bottom-Right
+            color: "#22C55E",
+            accent: "#f59e0b",
+            badge: "Agriculture",
+            pulse: 0,
+            hoverAlpha: 0,
+            x: 0, y: 0,
+            currentX: 0, currentY: 0,
+            isDragging: false,
+            isSnapping: false,
+            drawIcon: (cx, cy) => {
+                // Draw leaf/plant shape
+                ctx.beginPath();
+                ctx.moveTo(cx, cy + 8);
+                ctx.quadraticCurveTo(cx - 8, cy, cx, cy - 8);
+                ctx.quadraticCurveTo(cx + 8, cy, cx, cy - 8);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(cx, cy + 8);
+                ctx.lineTo(cx, cy - 8);
+                ctx.stroke();
+            }
+        }
+    ];
+
+    // Data Flow Packets running along paths
+    const dataPackets = [];
+    for (let i = 0; i < 4; i++) {
+        dataPackets.push({
+            nodeIndex: i,
+            progress: Math.random(),
+            speed: 0.003 + Math.random() * 0.003,
+            size: 2 + Math.random() * 2
+        });
+        dataPackets.push({
+            nodeIndex: i,
+            progress: Math.random(),
+            speed: 0.004 + Math.random() * 0.004,
+            size: 2 + Math.random() * 2
+        });
+    }
+
+    // Generic floating dust particles
+    class Dust {
+        constructor() {
+            this.reset();
+            this.y = Math.random() * height;
+        }
+        reset() {
+            this.x = Math.random() * width;
+            this.y = height + 10;
+            this.vx = (Math.random() - 0.5) * 0.15;
+            this.vy = 0.15 + Math.random() * 0.35;
+            this.r = 0.4 + Math.random() * 1.2;
+            this.alpha = 0.15 + Math.random() * 0.35;
+        }
+        update() {
+            this.y -= this.vy;
+            this.x += this.vx;
+            if (this.y < 0) this.reset();
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(34, 211, 238, ${this.alpha})`;
+            ctx.fill();
+        }
+    }
+    const dustParticles = Array.from({ length: 45 }, () => new Dust());
+
+    // 3D rotation angles
+    let rx = 0;
+    let ry = 0;
+    let rz = 0;
+
+    function animate(time) {
+        ctx.clearRect(0, 0, width, height);
+
+        // Draw background drag glow if dragging
+        if (draggedNode && draggedNode.isDragging) {
+            ctx.save();
+            const glowGradient = ctx.createRadialGradient(
+                draggedNode.currentX, draggedNode.currentY, 0,
+                draggedNode.currentX, draggedNode.currentY, Math.max(width, height) * 0.65
+            );
+            const glowColor = draggedNode.color;
+            glowGradient.addColorStop(0, hexToRgba(glowColor, 0.22));
+            glowGradient.addColorStop(0.35, hexToRgba(glowColor, 0.06));
+            glowGradient.addColorStop(1, 'rgba(2, 8, 23, 0)');
+
+            ctx.fillStyle = glowGradient;
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+        }
+
+        // Smooth mouse parallax
+        mouseX += (targetX - mouseX) * 0.05;
+        mouseY += (targetY - mouseY) * 0.05;
+        const pX = (mouseX - width / 2) * 0.025;
+        const pY = (mouseY - height / 2) * 0.025;
+
+        const cx = width / 2 + pX;
+        const cy = height / 2 + pY;
+
+        rx += 0.005;
+        ry += 0.007;
+        rz += 0.003;
+
+        // Position of child nodes relative to central CMS Core
+        const isMobile = width < 768;
+        const nodeDistance = isMobile ? 80 : Math.min(width * 0.32, 340);
+
+        childNodes.forEach((node, idx) => {
+            let targetNodeX = cx;
+            let targetNodeY = cy;
+
+            if (isMobile) {
+                if (node.slug === 'maxseal') {
+                    targetNodeX = cx - 90;
+                    targetNodeY = cy - 300;
+                } else if (node.slug === 'abcschool') {
+                    targetNodeX = cx + 90;
+                    targetNodeY = cy - 300;
+                } else if (node.slug === 'hospital') {
+                    targetNodeX = cx - 90;
+                    targetNodeY = cy + 300;
+                } else if (node.slug === 'agree') {
+                    targetNodeX = cx + 90;
+                    targetNodeY = cy + 300;
+                }
+            } else {
+                if (node.slug === 'maxseal') {
+                    targetNodeX = cx - nodeDistance;
+                    targetNodeY = cy - 110;
+                } else if (node.slug === 'abcschool') {
+                    targetNodeX = cx + nodeDistance;
+                    targetNodeY = cy - 110;
+                } else if (node.slug === 'hospital') {
+                    targetNodeX = cx - nodeDistance;
+                    targetNodeY = cy + 110;
+                } else if (node.slug === 'agree') {
+                    targetNodeX = cx + nodeDistance;
+                    targetNodeY = cy + 110;
+                }
+            }
+
+            // Clamp coordinates to keep nodes inside canvas padding
+            node.x = Math.max(45, Math.min(width - 45, targetNodeX));
+            node.y = Math.max(45, Math.min(height - 45, targetNodeY));
+
+            // Initialize rendering coordinates on first frame
+            if (!node.currentX || isNaN(node.currentX)) {
+                node.currentX = node.x;
+                node.currentY = node.y;
+            }
+
+            // Coordinate state machine
+            if (node.isDragging) {
+                node.currentX = Math.max(45, Math.min(width - 45, node.currentX));
+                node.currentY = Math.max(45, Math.min(height - 45, node.currentY));
+            } else if (node.isSnapping) {
+                // Spring lerp back
+                const dx = node.x - node.currentX;
+                const dy = node.y - node.currentY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 0.5) {
+                    node.currentX = node.x;
+                    node.currentY = node.y;
+                    node.isSnapping = false;
+                } else {
+                    node.currentX += dx * 0.15;
+                    node.currentY += dy * 0.15;
+                }
+            } else {
+                node.currentX = node.x;
+                node.currentY = node.y;
+            }
+        });
+
+        // Detect hovered node
+        let hoveredNode = null;
+        childNodes.forEach((node) => {
+            const dx = mouseCanvasX - node.currentX;
+            const dy = mouseCanvasY - node.currentY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            // Circle check (active radius is 26px)
+            if (dist < 26) {
+                hoveredNode = node;
+            }
+        });
+
+        // Set cursor pointer/default on body/canvas
+        if (hoveredNode) {
+            document.body.style.cursor = 'pointer';
+        } else {
+            document.body.style.cursor = 'default';
+        }
+
+        childNodes.forEach((node, idx) => {
+            // Update hover Alpha
+            const isCurrentlyHovered = (hoveredNode === node);
+            if (isCurrentlyHovered) {
+                node.hoverAlpha = Math.min(1, node.hoverAlpha + 0.15);
+            } else {
+                node.hoverAlpha = Math.max(0, node.hoverAlpha - 0.15);
+            }
+
+            // Draw connecting path (Blueprint pipeline)
+            ctx.strokeStyle = 'rgba(14, 165, 233, 0.06)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(node.currentX, node.currentY);
+            ctx.stroke();
+
+            // Pipeline indicator dashes
+            ctx.save();
+            ctx.setLineDash([4, 6]);
+            ctx.strokeStyle = 'rgba(34, 211, 238, 0.08)';
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(node.currentX, node.currentY);
+            ctx.stroke();
+            ctx.restore();
+
+            // Node rings and pulses
+            if (node.pulse > 0) node.pulse -= 0.04;
+
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = `rgba(14, 165, 233, ${0.1 + node.pulse * 0.2})`;
+            ctx.beginPath();
+            ctx.arc(node.currentX, node.currentY, 36 + node.pulse * 10, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Draw hover extra outer glow ring
+            if (node.hoverAlpha > 0) {
+                ctx.strokeStyle = `rgba(34, 211, 238, ${node.hoverAlpha * 0.3})`;
+                ctx.beginPath();
+                ctx.arc(node.currentX, node.currentY, 45, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            ctx.save();
+            ctx.setLineDash([3, 5]);
+            ctx.strokeStyle = node.color + '40';
+            ctx.beginPath();
+            ctx.arc(node.currentX, node.currentY, 28, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.fillStyle = '#020817';
+            ctx.beginPath();
+            ctx.arc(node.currentX, node.currentY, 22, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = node.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(node.currentX, node.currentY, 22, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Inner Icon
+            ctx.strokeStyle = node.color;
+            ctx.lineWidth = 1.5;
+            node.drawIcon(node.currentX, node.currentY);
+
+            // Labels
+            ctx.font = 'bold 10px monospace';
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.fillText(node.name, node.currentX, node.currentY - 42);
+
+            ctx.font = '8px monospace';
+            ctx.fillStyle = node.accent;
+            ctx.fillText(`[ ${node.badge} ]`, node.currentX, node.currentY - 30);
+            ctx.fillText('STATUS: ONLINE', node.currentX, node.currentY + 36);
+        });
+
+        // Draw Flow Packets
+        dataPackets.forEach(pkt => {
+            pkt.progress += pkt.speed;
+            if (pkt.progress >= 1) {
+                pkt.progress = 0;
+                childNodes[pkt.nodeIndex].pulse = 1.0;
+            }
+
+            const targetNode = childNodes[pkt.nodeIndex];
+            const px = cx + (targetNode.currentX - cx) * pkt.progress;
+            const py = cy + (targetNode.currentY - cy) * pkt.progress;
+
+            ctx.beginPath();
+            ctx.arc(px, py, pkt.size + 2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(34, 211, 238, 0.15)`;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(px, py, pkt.size, 0, Math.PI * 2);
+            ctx.fillStyle = targetNode.color;
+            ctx.fill();
+        });
+
+        // Draw Perspective 3D Cube Core
+        const coreScale = 75;
+        const projected = vertices.map(v => project(v, coreScale, cx, cy, rx, ry, rz));
+
+        ctx.fillStyle = 'rgba(11, 44, 93, 0.03)';
+        ctx.beginPath();
+        projected.forEach((p, idx) => {
+            if (idx === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+        });
+        ctx.fill();
+
+        ctx.lineWidth = 1;
+        edges.forEach(edge => {
+            const p1 = projected[edge[0]];
+            const p2 = projected[edge[1]];
+
+            const avgZ = (p1.z + p2.z) / 2;
+            const alpha = 0.1 + ((avgZ + 1) / 2) * 0.4;
+
+            ctx.strokeStyle = `rgba(34, 211, 238, ${alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+        });
+
+        // pulsing core sphere
+        const pulseCoreRadius = 24 + Math.sin(time / 250) * 4;
+        ctx.beginPath();
+        ctx.arc(cx, cy, pulseCoreRadius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(14, 165, 233, 0.04)';
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(34, 211, 238, 0.3)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, pulseCoreRadius - 4, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.font = 'bold 9px monospace';
+        ctx.fillStyle = '#22D3EE';
+        ctx.textAlign = 'center';
+        ctx.fillText('CMS', cx, cy - 2);
+        ctx.font = '8px monospace';
+        ctx.fillStyle = 'rgba(14, 165, 233, 0.7)';
+        ctx.fillText('HUB_V3', cx, cy + 8);
+
+        ctx.strokeStyle = 'rgba(14, 165, 233, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 58, 0, Math.PI * 2);
+        ctx.stroke();
+
+        dustParticles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+
+        // Draw HUD Tooltips on top of everything
+        childNodes.forEach(node => {
+            if (node.hoverAlpha > 0) {
+                ctx.save();
+                ctx.globalAlpha = node.hoverAlpha;
+
+                // Tooltip box size
+                const boxWidth = 200;
+                const boxHeight = 105;
+                
+                // Determine layout direction (draw left or right of node)
+                let boxX = node.currentX + 35;
+                if (node.currentX < cx) { // Left side of center, draw to its left
+                    boxX = node.currentX - boxWidth - 35;
+                }
+                
+                let boxY = node.currentY - boxHeight / 2;
+                boxY = Math.max(15, Math.min(height - boxHeight - 15, boxY));
+
+                // Draw drop shadow blur for neon glow matching node color
+                ctx.shadowColor = node.color;
+                ctx.shadowBlur = 15;
+                ctx.fillStyle = 'rgba(2, 8, 23, 0.9)';
+                ctx.strokeStyle = node.color;
+                ctx.lineWidth = 1.5;
+
+                drawRoundRect(ctx, boxX, boxY, boxWidth, boxHeight, 8, true, true);
+                
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = node.color;
+                ctx.fillRect(boxX + 12, boxY + 28, boxWidth - 24, 1);
+
+                ctx.font = 'bold 11px monospace';
+                ctx.fillStyle = '#FFFFFF';
+                ctx.textAlign = 'left';
+                ctx.fillText(node.name, boxX + 12, boxY + 20);
+
+                ctx.font = '9px monospace';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                
+                // Sector
+                ctx.fillText(`SECTOR:`, boxX + 12, boxY + 45);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText(node.badge.toUpperCase(), boxX + 65, boxY + 45);
+                
+                // Domain
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fillText(`DOMAIN:`, boxX + 12, boxY + 60);
+                ctx.fillStyle = '#FFFFFF';
+                const domainStr = node.slug === 'maxseal' ? 'maxsealinc.com' : (node.slug === 'abcschool' ? 'abcschool.edu' : (node.slug === 'hospital' ? 'cityhope.org' : 'agreefarms.com'));
+                ctx.fillText(domainStr, boxX + 65, boxY + 60);
+
+                // Contact
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fillText(`CONTACT:`, boxX + 12, boxY + 75);
+                ctx.fillStyle = '#FFFFFF';
+                const phoneStr = node.slug === 'maxseal' ? '910-738-2866' : (node.slug === 'abcschool' ? '555-ABC-SCHL' : (node.slug === 'hospital' ? '800-HOPE-MED' : '800-555-FARM'));
+                ctx.fillText(phoneStr, boxX + 65, boxY + 75);
+
+                // Status tag (Online pill)
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fillText(`STATUS:`, boxX + 12, boxY + 90);
+                
+                ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+                drawRoundRect(ctx, boxX + 65, boxY + 81, 52, 12, 3, true, false);
+                ctx.fillStyle = '#10B981';
+                ctx.font = 'bold 8px monospace';
+                ctx.fillText('ONLINE', boxX + 73, boxY + 90);
+
+                ctx.restore();
+            }
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+}

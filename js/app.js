@@ -174,6 +174,28 @@ function getTerminology() {
             tab2: "Care Protocols",
             tab3: "Treatments"
         };
+    } else if (slug === 'agree') {
+        return {
+            heroHeading: "Sustainable Farming & Agriculture Innovations",
+            heroDesc: "Empowering growers with organic methods and premium harvests. Explore our wholesale grains, organic vegetables, and distribution channels.",
+            productLabel: "Crops & Produce",
+            exploreProductsLabel: "Explore Harvests",
+            exploreCatalogsLabel: "Harvest Calendars",
+            productsHeading: "Seasonal Crop Selections",
+            productsSub: "Pesticide-free organic vegetables, hardy grains, and quality control systems.",
+            moreBtn: "Explore Produce Catalog",
+            catalogLabel: "Organic Certifications & Reports",
+            catalogSub: "Download crop reports, soil analysis sheets, farming standards, and certificates.",
+            timelineHeading: "Agree Farms Heritage Milestones",
+            contactCta: "Wholesale Partner Consultation",
+            contactCtaSub: "Connect with our distribution team to evaluate seasonal agreements, harvest bookings, or supply chains.",
+            contactBtn: "Contact Farms Desk",
+            subjectLabel: "Crop Variety / Strain",
+            specTitle: "Cultivation & Sowing Logs",
+            tab1: "Sowing & Harvest",
+            tab2: "Organic Methods",
+            tab3: "Crop Profiles"
+        };
     } else {
         // Default: maxseal
         return {
@@ -232,6 +254,7 @@ function renderFloatingSwitcher() {
             <option value="maxseal" ${active === 'maxseal' ? 'selected' : ''}>MAX-SEAL (Valves)</option>
             <option value="abcschool" ${active === 'abcschool' ? 'selected' : ''}>ABC School (School)</option>
             <option value="hospital" ${active === 'hospital' ? 'selected' : ''}>City Hospital (Hospital)</option>
+            <option value="agree" ${active === 'agree' ? 'selected' : ''}>Agree Farms (Agriculture)</option>
         </select>
     `;
     document.body.appendChild(switcher);

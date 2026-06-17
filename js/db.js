@@ -654,3 +654,68 @@ async function deletePartner(id) {
     }
     return data;
 }
+
+// ==========================================
+// AUTHENTICATION MODULE
+// ==========================================
+async function validateAdminCredentials(email, password) {
+    // 1. If we are running in local fallback mode, check against hardcoded defaults
+    if (useLocalFallback) {
+        const fallbackUsers = [
+            { email: 'admin@maxsealinc.com', password: 'admin123', role: 'Admin' },
+            { email: 'reviewer@maxsealinc.com', password: 'reviewer123', role: 'Reviewer' },
+            { email: 'editor@maxsealinc.com', password: 'editor123', role: 'Editor' }
+        ];
+        const user = fallbackUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+        if (user) {
+            return { success: true, user };
+        }
+        return { success: false, message: "Invalid email or password (Local Fallback Mode)." };
+    }
+
+    // 2. Query Supabase admin_users table
+    try {
+        const { data, error } = await supabaseClient
+            .from('admin_users')
+            .select('*')
+            .eq('email', email)
+            .eq('password', password)
+            .maybeSingle();
+
+        if (error) {
+            console.error("Database auth error:", error);
+            // If the relation doesn't exist yet (e.g. they haven't run setup.sql / seeded), fallback gracefully
+            if (error.code === 'PGRST116' || error.message.includes('relation "public.admin_users" does not exist')) {
+                const fallbackUsers = [
+                    { email: 'admin@maxsealinc.com', password: 'admin123', role: 'Admin' },
+                    { email: 'reviewer@maxsealinc.com', password: 'reviewer123', role: 'Reviewer' },
+                    { email: 'editor@maxsealinc.com', password: 'editor123', role: 'Editor' }
+                ];
+                const user = fallbackUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+                if (user) {
+                    return { success: true, user };
+                }
+            }
+            throw new Error(error.message);
+        }
+
+        if (data) {
+            return { success: true, user: data };
+        } else {
+            return { success: false, message: "Invalid email or password." };
+        }
+    } catch (e) {
+        console.error("Auth query catch error:", e);
+        // Secondary fallback to allow logging in offline/unseeded
+        const fallbackUsers = [
+            { email: 'admin@maxsealinc.com', password: 'admin123', role: 'Admin' },
+            { email: 'reviewer@maxsealinc.com', password: 'reviewer123', role: 'Reviewer' },
+            { email: 'editor@maxsealinc.com', password: 'editor123', role: 'Editor' }
+        ];
+        const user = fallbackUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+        if (user) {
+            return { success: true, user };
+        }
+        return { success: false, message: e.message || "Authentication service failed." };
+    }
+}

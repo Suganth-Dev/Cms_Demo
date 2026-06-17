@@ -18,6 +18,11 @@ const DEFAULT_HEROS = {
         heroHeading: "Compassionate Care, Advanced Clinical Medicine",
         heroSubheading: "Providing hybrid cardiovascular theaters, robotic diagnostics, and specialized critical health centers open 24/7.",
         heroImage: "https://images.unsplash.com/photo-1586773860418-d3b3de97e663?w=1200&auto=format&fit=crop&q=80"
+    },
+    agree: {
+        heroHeading: "Cultivating Quality, Nurturing the Future.",
+        heroSubheading: "Agree Farms utilizes state-of-the-art agricultural techniques and sustainable processes to produce premium organic vegetables, wholesale grains, and fruits.",
+        heroImage: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1200&auto=format&fit=crop&q=80"
     }
 };
 
@@ -37,6 +42,11 @@ const PRESET_IMAGES = {
         "https://images.unsplash.com/photo-1586773860418-d3b3de97e663?w=800&auto=format&fit=crop&q=80",
         "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80",
         "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80"
+    ],
+    agree: [
+        "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=800&auto=format&fit=crop&q=80"
     ]
 };
 
@@ -54,7 +64,7 @@ async function initRedesignApp() {
     activeSiteSlug = params.get('site') || 'maxseal';
     
     // Validate slug
-    if (!['maxseal', 'abcschool', 'hospital'].includes(activeSiteSlug)) {
+    if (!['maxseal', 'abcschool', 'hospital', 'agree'].includes(activeSiteSlug)) {
         activeSiteSlug = 'maxseal';
     }
 
@@ -62,8 +72,9 @@ async function initRedesignApp() {
     let siteHtmlFile = 'maxseal.html';
     if (activeSiteSlug === 'abcschool') siteHtmlFile = 'school.html';
     if (activeSiteSlug === 'hospital') siteHtmlFile = 'hospital.html';
+    if (activeSiteSlug === 'agree') siteHtmlFile = 'agree.html';
 
-    document.getElementById('chrome-address-url').textContent = `http://localhost:8080/${siteHtmlFile}`;
+    document.getElementById('chrome-address-url').textContent = `${window.location.origin}/${siteHtmlFile}`;
     
     // Set preview iframe src
     const iframe = document.getElementById('preview-frame');
@@ -140,9 +151,20 @@ function populateRedesignForm() {
     }
 
     // Colors
-    const primaryHex = currentSettings.primaryColor || '#0B2C5D';
-    const secondaryHex = currentSettings.secondaryColor || '#0E5CAD';
-    const accentHex = currentSettings.accentColor || '#19B5FE';
+    let defaultPrimary = '#0B2C5D';
+    let defaultSecondary = '#0E5CAD';
+    let defaultAccent = '#19B5FE';
+    if (activeSiteSlug === 'abcschool') {
+        defaultPrimary = '#1B4332'; defaultSecondary = '#2D6A4F'; defaultAccent = '#D4AF37';
+    } else if (activeSiteSlug === 'hospital') {
+        defaultPrimary = '#0D9488'; defaultSecondary = '#0F766E'; defaultAccent = '#38BDF8';
+    } else if (activeSiteSlug === 'agree') {
+        defaultPrimary = '#15803d'; defaultSecondary = '#166534'; defaultAccent = '#f59e0b';
+    }
+
+    const primaryHex = currentSettings.primaryColor || defaultPrimary;
+    const secondaryHex = currentSettings.secondaryColor || defaultSecondary;
+    const accentHex = currentSettings.accentColor || defaultAccent;
 
     document.getElementById('redesign-color-primary').value = primaryHex;
     document.getElementById('redesign-color-primary-text').value = primaryHex;
@@ -494,6 +516,13 @@ function populateProductCategories() {
             <option value="Pediatric Care">Pediatric Care</option>
             <option value="Neurology Specialty">Neurology Specialty</option>
             <option value="Oncology Care">Oncology Care</option>
+        `;
+    } else if (activeSiteSlug === 'agree') {
+        categorySelect.innerHTML = `
+            <option value="Organic Vegetables">Organic Vegetables</option>
+            <option value="Wholesale Grains">Wholesale Grains</option>
+            <option value="Seasonal Fruits">Seasonal Fruits</option>
+            <option value="Farming Equipment">Farming Equipment</option>
         `;
     } else {
         categorySelect.innerHTML = `

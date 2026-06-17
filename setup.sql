@@ -77,7 +77,16 @@ CREATE TABLE IF NOT EXISTS public.partners (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 7. Disable Row Level Security (RLS) for POC
+-- 7. Create Admin Users Table
+CREATE TABLE IF NOT EXISTS public.admin_users (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'Admin', -- Admin, Reviewer, Editor
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- 8. Disable Row Level Security (RLS) for POC
 -- This ensures the client-side Anon Key can directly read, insert, update, and delete entries.
 ALTER TABLE public.products DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.documents DISABLE ROW LEVEL SECURITY;
@@ -85,13 +94,15 @@ ALTER TABLE public.media DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.settings DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.marketing DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.partners DISABLE ROW LEVEL SECURITY;
+ALTER TABLE public.admin_users DISABLE ROW LEVEL SECURITY;
 
--- 8. Add Indexes for Faster Fetching
+-- 9. Add Indexes for Faster Fetching
 CREATE INDEX IF NOT EXISTS idx_products_site_slug ON public.products(site_slug);
 CREATE INDEX IF NOT EXISTS idx_documents_site_slug ON public.documents(site_slug);
 CREATE INDEX IF NOT EXISTS idx_media_site_slug ON public.media(site_slug);
 CREATE INDEX IF NOT EXISTS idx_marketing_site_slug ON public.marketing(site_slug);
 CREATE INDEX IF NOT EXISTS idx_partners_site_slug ON public.partners(site_slug);
+CREATE INDEX IF NOT EXISTS idx_admin_users_email ON public.admin_users(email);
 
 -- Setup completed successfully.
 
@@ -108,8 +119,8 @@ ON CONFLICT (site_slug) DO UPDATE SET settings_data = EXCLUDED.settings_data;
 
 -- 2. Insert products
 INSERT INTO public.products (site_slug, title, category, status, image_url, description, features, specifications, industries, slug) VALUES
-('maxseal', 'Tri-Max Series Triple Offset Butterfly Valve', 'Triple Offset Valves', 'Published', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80', 'The Tri-Max Series features a triple offset design that provides zero-leakage bi-directional shut-off. Perfect for high-pressure and extreme temperature services in refining, chemical processing, and power generation.', '["Triple eccentric design for friction-free opening and closing", "Metal-to-metal seating ensures fire-safe operation", "Zero leakage performance in compliance with API 598", "Bi-directional shutoff under full rating differential pressure", "Stellite 6 hardfaced seat for high wear resistance"]'::jsonb, '{"Size Range": "3\\" to 48\\" (80mm - 1200mm)", "Body Styles": "Wafer, Lug, Flanged", "Seat Materials": "Stellite 6 / Duplex Stainless Steel laminated with Graphite", "Pressure Rating": "Class 150, 300, and 600", "Temperature Range": "-320°F to 1000°F (-196°C to 538°C)"}'::jsonb, '["Oil & Gas", "Chemical Processing", "Refineries", "Power Generation", "Cryogenics"]'::jsonb, 'tri-max-series-triple-offset-butterfly-valve'),
-('maxseal', 'Chem-Flo Series PFA Lined Butterfly Valve', 'PFA Lined Valves', 'Published', 'https://images.unsplash.com/photo-1535813547-99c456a41d4a?w=800&auto=format&fit=crop&q=80', 'The Chem-Flo series is designed specifically for highly corrosive and toxic media applications. The valve is fully lined with high-density PFA (minimum thickness 3mm) to prevent permeation and isolate the valve body from the process fluid.', '["Minimum 3mm virgin PFA lining fully bonded to body and disc", "Live-loaded stem sealing prevents fugitive emissions", "One-piece disc and stem design minimizes flow turbulence", "PTFE-lined bearings eliminate shaft friction and side thrusts", "ISO 5211 mounting pad for quick actuator installation"]'::jsonb, '{"Size Range": "2\\" to 24\\" (50mm - 600mm)", "Body Styles": "Wafer, Lug", "Lining Material": "Virgin PFA (Option for Conductive PFA)", "Pressure Rating": "150 PSI working pressure", "Temperature Range": "-20°F to 350°F (-29°C to 176°C)"}'::jsonb, '["Chemical Processing", "Pharmaceuticals", "Acid Pickling", "Pulp & Paper", "Mining"]'::jsonb, 'chem-flo-series-pfa-lined-butterfly-valve'),
+('maxseal', 'Tri-Max Series Triple Offset Butterfly Valve', 'Triple Offset Valves', 'Published', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80', 'The Tri-Max Series features a triple offset design that provides zero-leakage bi-directional shut-off. Perfect for high-pressure and extreme temperature services in refining, chemical processing, and power generation.', '["Triple eccentric design for friction-free opening and closing", "Metal-to-metal seating ensures fire-safe operation", "Zero leakage performance in compliance with API 598", "Bi-directional shutoff under full rating differential pressure", "Stellite 6 hardfaced seat for high wear resistance"]'::jsonb, '{"Size Range": "3\" to 48\" (80mm - 1200mm)", "Body Styles": "Wafer, Lug, Flanged", "Seat Materials": "Stellite 6 / Duplex Stainless Steel laminated with Graphite", "Pressure Rating": "Class 150, 300, and 600", "Temperature Range": "-320°F to 1000°F (-196°C to 538°C)"}'::jsonb, '["Oil & Gas", "Chemical Processing", "Refineries", "Power Generation", "Cryogenics"]'::jsonb, 'tri-max-series-triple-offset-butterfly-valve'),
+('maxseal', 'Chem-Flo Series PFA Lined Butterfly Valve', 'PFA Lined Valves', 'Published', 'https://images.unsplash.com/photo-1535813547-99c456a41d4a?w=800&auto=format&fit=crop&q=80', 'The Chem-Flo series is designed specifically for highly corrosive and toxic media applications. The valve is fully lined with high-density PFA (minimum thickness 3mm) to prevent permeation and isolate the valve body from the process fluid.', '["Minimum 3mm virgin PFA lining fully bonded to body and disc", "Live-loaded stem sealing prevents fugitive emissions", "One-piece disc and stem design minimizes flow turbulence", "PTFE-lined bearings eliminate shaft friction and side thrusts", "ISO 5211 mounting pad for quick actuator installation"]'::jsonb, '{"Size Range": "2\" to 24\" (50mm - 600mm)", "Body Styles": "Wafer, Lug", "Lining Material": "Virgin PFA (Option for Conductive PFA)", "Pressure Rating": "150 PSI working pressure", "Temperature Range": "-20°F to 350°F (-29°C to 176°C)"}'::jsonb, '["Chemical Processing", "Pharmaceuticals", "Acid Pickling", "Pulp & Paper", "Mining"]'::jsonb, 'chem-flo-series-pfa-lined-butterfly-valve'),
 ('abcschool', 'Advanced Placement Calculus AB', 'Mathematics', 'Published', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&fit=crop&q=80', 'AP Calculus AB covers limits, derivatives, definite and indefinite integrals, and fundamental calculus theorems. Designed to prepare students for college-level engineering and science paths.', '["Prepares students for AP Exams with college credits", "Includes detailed interactive graphic tools", "Small classroom sizes (max 15)", "Guided tutorial hours with math chairs"]'::jsonb, '{"Grade Level": "11th and 12th Grades", "Course Length": "Full Academic Year", "Credits Available": "1.0 High School / 4.0 College Credits", "Prerequisite": "Pre-Calculus (Min Grade B)"}'::jsonb, '["Academics", "College Prep", "STEM Fields"]'::jsonb, 'ap-calculus-ab-honours'),
 ('hospital', 'Cardiovascular Health & Surgery Center', 'Cardiology Center', 'Published', 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80', 'Provides full cardiac evaluations, coronary artery stenting, heart failure diagnostics, valve repairs, and post-operative cardiac rehabilitation clinics under certified heart specialists.', '["24/7 Dedicated cardiac catheterisation lab", "Minimally invasive keyhole heart surgeries", "Outpatient support remote tracking"]'::jsonb, '{"Bed Count": "45 Intensive Care Beds", "Specialties": "Electrophysiology, Angioplasty, Valve Repairs", "Operating Rooms": "4 Hybrid Surgical Theaters", "Chief of Department": "Dr. Sarah Lin, MD, FACC"}'::jsonb, '["Critical Care", "Surgery", "Heart Diagnostics"]'::jsonb, 'cardiovascular-health-surgery-center')
 ON CONFLICT (site_slug, slug) DO NOTHING;
@@ -132,4 +143,11 @@ INSERT INTO public.partners (site_slug, name, country, website_link) VALUES
 ('maxseal', 'Global Valves & Actuators Ltd', 'United Kingdom', 'https://example.com'),
 ('abcschool', 'Cambridge Assessment International Education', 'United Kingdom', 'https://example.com'),
 ('hospital', 'Harvard Medical School Affiliate', 'United States', 'https://example.com');
+
+-- 6. Insert admin users
+INSERT INTO public.admin_users (email, password, role) VALUES
+('admin@maxsealinc.com', 'admin123', 'Admin'),
+('reviewer@maxsealinc.com', 'reviewer123', 'Reviewer'),
+('editor@maxsealinc.com', 'editor123', 'Editor')
+ON CONFLICT (email) DO NOTHING;
 

@@ -360,6 +360,135 @@ const MULTI_SITE_DATA = {
         media: [
             { filename: "cardiology-theater.jpg", file_url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80", file_type: "image/jpeg", size: 412091 }
         ]
+    },
+    // -------------------------------------------------------------
+    // AGREE FARMS & AGRICULTURE (slug: agree)
+    // -------------------------------------------------------------
+    agree: {
+        settings: {
+            companyName: "Agree Farms & Agriculture",
+            logoText: "Agree Farms",
+            tagline: "Premium Sustainable Farming & Organic Crops",
+            address: "1024 Harvest Way, Salinas Valley, CA 93901",
+            phone: "1-800-555-FARM (3276)",
+            email: "info@agreefarms.com",
+            facebook: "https://facebook.com/agreefarms",
+            linkedin: "https://linkedin.com/company/agree-farms",
+            twitter: "https://twitter.com/agreefarms",
+            primaryColor: "#15803d",
+            secondaryColor: "#166534",
+            accentColor: "#f59e0b",
+            heroHeading: "Cultivating Quality, Nurturing the Future.",
+            heroSubheading: "Agree Farms utilizes state-of-the-art agricultural techniques and sustainable processes to produce premium organic vegetables, wholesale grains, and fruits.",
+            headerCtaText: "1-800-555-FARM",
+            headerCtaHref: "tel:18005553276",
+            navLabels: ["Home", "Produce", "Harvest Reports", "Guides", "Partners", "Contact"],
+            footerCompany: "Agree Farms & Agriculture",
+            footerTagline: "Providing premium organic harvests and sustainable distributing partnerships since 2012.",
+            footerCopyright: "Agree Farms Agriculture Group",
+            footerAddress: "1024 Harvest Way, Salinas Valley, CA 93901",
+            footerPhone: "1-800-555-FARM",
+            footerFax: "1-800-555-3277",
+            footerEmail: "info@agreefarms.com",
+            footerLinks: ["Home", "Organic Standards", "Partnerships", "Careers"]
+        },
+        products: [
+            {
+                title: "USDA Organic Honeycrisp Apples",
+                category: "Seasonal Fruits",
+                status: "Published",
+                image_url: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800&auto=format&fit=crop&q=80",
+                description: "Sweet, crisp, and 100% certified organic Honeycrisp apples, grown under strict natural soil management and hand-harvested.",
+                features: JSON.stringify([
+                    "Certified organic by USDA",
+                    "Naturally sun-ripened",
+                    "Ideal for wholesale and retail",
+                    "High dietary fiber & vitamins",
+                    "Long storage life under temperature control"
+                ]),
+                specifications: JSON.stringify({
+                    "Harvest Season": "Late Summer / Early Autumn",
+                    "Sowing Log": "Perennial Orchard",
+                    "Farming Method": "100% Pesticide-Free Organic Orchard",
+                    "Packaging": "40lb wholesale cardboard crates"
+                }),
+                industries: JSON.stringify(["Wholesale Retailers", "Organic Food Markets", "Juice Producers"]),
+                slug: "usda-organic-honeycrisp-apples"
+            },
+            {
+                title: "Heritage Hard Red Winter Wheat",
+                category: "Wholesale Grains",
+                status: "Published",
+                image_url: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&auto=format&fit=crop&q=80",
+                description: "Premium red winter wheat with high protein content, ideal for flour mills, bread baking, and industrial food processing.",
+                features: JSON.stringify([
+                    "High protein concentration (13%+)",
+                    "Locally sourced heirloom strain",
+                    "Grown with sustainable crop rotation",
+                    "Triple cleaned for maximum purity",
+                    "Certified non-GMO grains"
+                ]),
+                specifications: JSON.stringify({
+                    "Harvest Season": "Mid-Summer",
+                    "Sowing Log": "Autumn Sowing",
+                    "Farming Method": "No-Till Conservation Tillage",
+                    "Packaging": "1-ton bulk transport sacks"
+                }),
+                industries: JSON.stringify(["Commercial Flour Mills", "Bakehouses", "Food Processors"]),
+                slug: "heritage-hard-red-winter-wheat"
+            },
+            {
+                title: "Premium Hydroponic Butterhead Lettuce",
+                category: "Organic Vegetables",
+                status: "Published",
+                image_url: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=800&auto=format&fit=crop&q=80",
+                description: "Ultra-fresh greenhouse-grown butterhead lettuce, delivered root-on to maintain maximum crispness and shelf life.",
+                features: JSON.stringify([
+                    "Hydroponically grown inside controlled greenhouse",
+                    "Zero synthetic pesticide contact",
+                    "Delivered with root system intact",
+                    "Rich buttery texture and sweet flavor",
+                    "Consistently sized heads"
+                ]),
+                specifications: JSON.stringify({
+                    "Harvest Season": "Year-round production",
+                    "Sowing Log": "Continuous 30-day rotation",
+                    "Farming Method": "Closed-Loop Nutrient Film Hydroponics",
+                    "Packaging": "12-count individual breathable clamshells"
+                }),
+                industries: JSON.stringify(["Supermarkets", "Restaurants", "Salad Packagers"]),
+                slug: "premium-hydroponic-butterhead-lettuce"
+            }
+        ],
+        documents: [
+            {
+                title: "USDA Organic Compliance Certificate 2026",
+                category: "Organic Certifications",
+                file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                description: "Official certification confirming compliance with national organic farming standards and pesticide restrictions."
+            },
+            {
+                title: "Salinas Valley Soil & Water Analysis Report",
+                category: "Harvest Reports",
+                file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                description: "Quarterly chemical and biological analysis of soil health, water purity, and micronutrient concentrations."
+            }
+        ],
+        marketing: [
+            {
+                title: "Organic Crop Rotation & Soil Nutrition Guide",
+                resource_type: "Video",
+                file_url: "https://www.w3schools.com/html/mov_bbb.mp4",
+                description: "Educational video outlining crop rotation intervals to naturally replenish soil nitrogen without synthetic fertilizers."
+            }
+        ],
+        partners: [
+            { name: "Salinas Valley Growers Alliance", country: "United States", website_link: "https://example.com" },
+            { name: "Pacific Organic Distributors Group", country: "United States", website_link: "https://example.com" }
+        ],
+        media: [
+            { filename: "harvest-fields.jpg", file_url: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800&auto=format&fit=crop&q=80", file_type: "image/jpeg", size: 382091 }
+        ]
     }
 };
 
@@ -431,6 +560,23 @@ async function seedDatabaseIfEmpty() {
                         await supabaseClient.from('media').insert([record]);
                     }
                 }
+            }
+        }
+
+        // 7. Seed Admin Users table if not in fallback mode and empty
+        if (!isFallback) {
+            try {
+                const { data: existingUsers, error: checkErr } = await supabaseClient.from('admin_users').select('id').limit(1);
+                if (!checkErr && (!existingUsers || existingUsers.length === 0)) {
+                    console.log("- Seeding admin users...");
+                    await supabaseClient.from('admin_users').insert([
+                        { email: 'admin@maxsealinc.com', password: 'admin123', role: 'Admin' },
+                        { email: 'reviewer@maxsealinc.com', password: 'reviewer123', role: 'Reviewer' },
+                        { email: 'editor@maxsealinc.com', password: 'editor123', role: 'Editor' }
+                    ]);
+                }
+            } catch (err) {
+                console.warn("Could not seed admin_users table (might not exist yet):", err.message);
             }
         }
 

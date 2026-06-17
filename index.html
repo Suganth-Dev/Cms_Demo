@@ -14,27 +14,15 @@
        1. CMS LOGIN VIEW
        ========================================== -->
     <div class="login-body" id="admin-login-wrapper">
-
-        <!-- Animated background orbs -->
-        <div class="login-bg-orb orb-1"></div>
-        <div class="login-bg-orb orb-2"></div>
-        <div class="login-bg-orb orb-3"></div>
+        <!-- Technical blueprint canvas background -->
+        <canvas id="login-canvas"></canvas>
 
         <div class="login-card">
 
             <!-- Logo / Brand -->
             <div class="login-header">
-                <div class="login-logo-icon">
-                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                        <rect width="28" height="28" rx="8" fill="url(#logoGrad)"/>
-                        <path d="M8 14h12M14 8v12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-                        <defs>
-                            <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28">
-                                <stop offset="0%" stop-color="#38BDF8"/>
-                                <stop offset="100%" stop-color="#0B2C5D"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
+                <div class="login-logo-icon" style="background: none; border: none; width: auto; height: 74px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                    <img src="images/IR-logo.png" alt="InnooRyze Logo" style="height: 74px; width: auto; display: block; filter: drop-shadow(0 4px 12px rgba(56, 189, 248, 0.25));">
                 </div>
                 <h1>InnooRyze<span> CMS</span></h1>
                 <p>Sign in to manage your client websites</p>
@@ -149,17 +137,21 @@
         <!-- Sidebar Navigation -->
         <aside class="admin-sidebar-menu">
             <div class="sidebar-logo">
-                <span class="sidebar-logo-title">InnooRyze<span> CMS</span></span>
-                <span class="sidebar-logo-sub">MULTI-TENANT CMS</span>
+                <img src="images/IR-logo.png" alt="InnooRyze Logo" class="sidebar-logo-img">
+                <div class="sidebar-logo-text">
+                    <span class="sidebar-logo-title">InnooRyze<span> CMS</span></span>
+                    <span class="sidebar-logo-sub">MULTI-TENANT CMS</span>
+                </div>
             </div>
 
             <!-- Site Selector Context -->
             <div style="padding: 16px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
                 <label for="admin-site-context" style="font-size: 11px; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 6px;">Active Site Context:</label>
-                <select id="admin-site-context" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; color: white; font-size: 13px; font-weight: 600; outline: none; cursor: pointer;">
+                <select id="admin-site-context">
                     <option value="maxseal">MAX-SEAL Valves</option>
                     <option value="abcschool">ABC School</option>
                     <option value="hospital">City Hospital</option>
+                    <option value="agree">Agree Farms</option>
                 </select>
             </div>
             
@@ -196,7 +188,7 @@
             </ul>
             
             <div class="sidebar-footer">
-                <a href="#" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.2); color: white; width: 100%; font-size: 13px;" onclick="handleAdminLogout()">
+                <a href="#" class="sidebar-logout-btn" onclick="handleAdminLogout()">
                     <i data-lucide="log-out"></i> Logout
                 </a>
             </div>
