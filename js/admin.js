@@ -1482,8 +1482,8 @@ function initLoginCanvasBackground() {
             name: "DYNALEKTRIC",
             slug: "dynalektric",
             angleOffset: 0, // Top center
-            color: "#0077B6",
-            accent: "#003366",
+            color: "#FACC15", // Yellow
+            accent: "#38BDF8", // Blue
             badge: "Engineering",
             pulse: 0,
             hoverAlpha: 0,
@@ -1492,12 +1492,17 @@ function initLoginCanvasBackground() {
             isDragging: false,
             isSnapping: false,
             drawIcon: (cx, cy) => {
-                // Draw Bolt/Electricity shape
+                // Draw Thunder/Lightning bolt shape
                 ctx.beginPath();
-                ctx.moveTo(cx + 2, cy - 8);
-                ctx.lineTo(cx - 4, cy + 2);
-                ctx.lineTo(cx + 4, cy + 2);
-                ctx.lineTo(cx - 2, cy + 8);
+                ctx.moveTo(cx + 3, cy - 10);
+                ctx.lineTo(cx - 4, cy + 1);
+                ctx.lineTo(cx + 2, cy + 1);
+                ctx.lineTo(cx - 3, cy + 11);
+                ctx.lineTo(cx + 5, cy - 2);
+                ctx.lineTo(cx - 1, cy - 2);
+                ctx.closePath();
+                ctx.fillStyle = "#FACC15";
+                ctx.fill();
                 ctx.stroke();
             }
         }
@@ -1609,24 +1614,24 @@ function initLoginCanvasBackground() {
                     targetNodeY = cy + 300;
                 } else if (node.slug === 'dynalektric') {
                     targetNodeX = cx;
-                    targetNodeY = cy - 420;
+                    targetNodeY = cy - 390;
                 }
             } else {
                 if (node.slug === 'maxseal') {
-                    targetNodeX = cx - nodeDistance;
+                    targetNodeX = cx - nodeDistance * 1.1;
                     targetNodeY = cy - 110;
                 } else if (node.slug === 'abcschool') {
-                    targetNodeX = cx + nodeDistance;
+                    targetNodeX = cx + nodeDistance * 1.1;
                     targetNodeY = cy - 110;
                 } else if (node.slug === 'hospital') {
-                    targetNodeX = cx - nodeDistance;
+                    targetNodeX = cx - nodeDistance * 1.1;
                     targetNodeY = cy + 110;
                 } else if (node.slug === 'agree') {
-                    targetNodeX = cx + nodeDistance;
+                    targetNodeX = cx + nodeDistance * 1.1;
                     targetNodeY = cy + 110;
                 } else if (node.slug === 'dynalektric') {
                     targetNodeX = cx;
-                    targetNodeY = cy - 250;
+                    targetNodeY = cy - 340;
                 }
             }
 
