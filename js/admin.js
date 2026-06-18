@@ -1613,8 +1613,8 @@ function initLoginCanvasBackground() {
                     targetNodeX = cx + 90;
                     targetNodeY = cy + 300;
                 } else if (node.slug === 'dynalektric') {
-                    targetNodeX = cx;
-                    targetNodeY = cy - 390;
+                    targetNodeX = cx + 130;
+                    targetNodeY = cy;
                 }
             } else {
                 if (node.slug === 'maxseal') {
@@ -1630,8 +1630,8 @@ function initLoginCanvasBackground() {
                     targetNodeX = cx + nodeDistance * 1.1;
                     targetNodeY = cy + 110;
                 } else if (node.slug === 'dynalektric') {
-                    targetNodeX = cx;
-                    targetNodeY = cy - 400;
+                    targetNodeX = cx + nodeDistance * 1.4;
+                    targetNodeY = cy;
                 }
             }
 
