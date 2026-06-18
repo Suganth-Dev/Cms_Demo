@@ -1410,8 +1410,8 @@ function initLoginCanvasBackground() {
             name: "ABC SCHOOL",
             slug: "abcschool",
             angleOffset: Math.PI / 4, // Top-Right
-            color: "#F59E0B",
-            accent: "#D4AF37",
+            color: "#A855F7",
+            accent: "#9333EA",
             badge: "Education",
             pulse: 0,
             hoverAlpha: 0,
@@ -1631,7 +1631,7 @@ function initLoginCanvasBackground() {
                     targetNodeY = cy + 110;
                 } else if (node.slug === 'dynalektric') {
                     targetNodeX = cx;
-                    targetNodeY = cy - 340;
+                    targetNodeY = cy - 400;
                 }
             }
 
