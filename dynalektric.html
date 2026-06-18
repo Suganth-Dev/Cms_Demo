@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Primary metadata -->
+  <title>Dynalektric | Industrial Engineering and Manufacturing Solutions</title>
+  <meta name="description" content="Explore Dynalektric's engineering, manufacturing, testing and application capabilities across mobility, energy, utilities, infrastructure and industrial sectors." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Dynalektric" />
+  <meta name="theme-color" content="#0077B6" />
+
+  <!-- Preconnect for fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Dynalektric Specific Styles -->
+  <link rel="stylesheet" href="Dynalektric/demo1DL/styles.css" />
+  <link rel="stylesheet" href="Dynalektric/demo1DL/page-styles.css" />
+  <link rel="stylesheet" href="Dynalektric/demo1DL/export-styles.css" />
+  
+  <!-- CMS Override Styles -->
+  <link rel="stylesheet" href="css/dynalektric.css" />
+  <link rel="stylesheet" href="css/admin.css"> <!-- For the floating switcher -->
+
+</head>
+<body data-page="home" data-texture="clean" data-density="comfortable">
+  <div id="app"></div>
+
+  <!-- Supabase & CMS Database Bridge -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/fix_assets.js"></script>
+  <script src="js/dynalektric.js"></script>
+
+  <!-- Web component for image slots -->
+  <script src="Dynalektric/demo1DL/image-slot.js"></script>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+  <!-- Tweaks panel + shared + header + page + app -->
+  <script type="text/babel" src="Dynalektric/demo1DL/tweaks-panel.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/shared.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/header.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/page-home.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/page-about.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/page-products.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/page-rnd.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/page-industries.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/page-export-data.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/page-export.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/page-contact.jsx"></script>
+  <script type="text/babel" src="Dynalektric/demo1DL/app.jsx"></script>
+
+  <!-- Include app.js to render floating switcher -->
+  <script src="js/app.js"></script>
+  <script>
+      // Force app.js to render the floating switcher for the dynamic tenant preview
+      document.addEventListener('DOMContentLoaded', () => {
+          setTimeout(() => {
+              if (typeof renderFloatingSwitcher === 'function') {
+                  renderFloatingSwitcher('dynalektric');
+              }
+          }, 1500); // Small delay to let React mount first
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+/* Dynalektric Tenant Overrides from CMS */
+:root {
+    /* If the CMS admin overrides the primary color */
+    --dyna-brand-primary: var(--primary-color, #0077B6);
+    --dyna-brand-secondary: var(--secondary-color, #003366);
+}
+
+/* Base resets or specific target elements can go here */
+
+.inline-editable {
+    outline: 2px dashed transparent;
+    transition: outline 0.2s ease, background 0.2s ease;
+    cursor: text;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+.inline-editable:hover {
+    outline: 2px dashed rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.05);
+}
+.inline-editable:focus {
+    outline: 2px solid var(--accent, #0077B6);
+    background: rgba(0,0,0,0.4);
+}

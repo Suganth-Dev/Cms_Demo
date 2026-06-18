@@ -463,15 +463,19 @@ const MULTI_SITE_DATA = {
         documents: [
             {
                 title: "USDA Organic Compliance Certificate 2026",
-                category: "Organic Certifications",
-                file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                description: "Official certification confirming compliance with national organic farming standards and pesticide restrictions."
+                doc_type: "Organic Certifications",
+                version: 1,
+                status: "Published",
+                original_filename: "organic_cert_2026.pdf",
+                file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
             },
             {
                 title: "Salinas Valley Soil & Water Analysis Report",
-                category: "Harvest Reports",
-                file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                description: "Quarterly chemical and biological analysis of soil health, water purity, and micronutrient concentrations."
+                doc_type: "Harvest Reports",
+                version: 1,
+                status: "Published",
+                original_filename: "soil_water_analysis.pdf",
+                file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
             }
         ],
         marketing: [
@@ -488,6 +492,238 @@ const MULTI_SITE_DATA = {
         ],
         media: [
             { filename: "harvest-fields.jpg", file_url: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800&auto=format&fit=crop&q=80", file_type: "image/jpeg", size: 382091 }
+        ]
+    },
+    // -------------------------------------------------------------
+    // DYNALEKTRIC (slug: dynalektric)
+    // -------------------------------------------------------------
+    dynalektric: {
+        settings: {
+            companyName: "Dynalektric Engineering",
+            logoText: "Dynalektric",
+            tagline: "Industrial Engineering and Manufacturing Solutions",
+            address: "Dynalektric HQ, Engineering Drive, Industrial Park",
+            phone: "1-800-DYNALEK",
+            email: "contact@dynalektric.com",
+            facebook: "https://facebook.com/dynalektric",
+            linkedin: "https://linkedin.com/company/dynalektric",
+            twitter: "https://twitter.com/dynalektric",
+            primaryColor: "#002A52",
+            secondaryColor: "#003366",
+            accentColor: "#0077B6",
+            heroHeading: "Engineering built for industrial progress.",
+            heroSubheading: "In-house engineering, manufacturing and testing for infrastructure, mobility, energy and industrial applications.",
+            headerCtaText: "1-800-DYNALEK",
+            headerCtaHref: "tel:1800DYNALEK",
+            navLabels: ["Home", "About", "Products", "R&D", "Industries", "Export", "Contact"],
+            footerCompany: "Dynalektric Engineering",
+            footerTagline: "Engineering solutions for demanding environments.",
+            footerCopyright: "Dynalektric. All Rights Reserved.",
+            footerAddress: "Dynalektric HQ, Engineering Drive",
+            footerPhone: "1-800-DYNALEK",
+            footerFax: "1-800-DYNALEK-FAX",
+            footerEmail: "contact@dynalektric.com",
+            footerLinks: ["Home", "About", "Contact"],
+            pageContent: {
+                home: {
+                    heroTitle: "Engineering-led electrical and electronics manufacturing.",
+                    heroDesc: "In-house engineering, manufacturing and testing for infrastructure, mobility, energy and industrial applications.",
+                    heroVideo: "Dynalektric/demo1DL/public/videos/Dynalektric_Hero.mp4",
+                    orgTitle: "The organisation behind every engineered solution.",
+                    orgLead: "Dynalektric combines engineering teams, manufacturing capability, testing processes and application experience within one operating environment.",
+                    orgImg: "Dynalektric/demo1DL/assets/card-magnetics.jpg",
+                    capTitle: "Engineering systems that power, control and support industrial operations.",
+                    capLead: "Dynalektric combines engineering, manufacturing and testing across four core capability areas serving demanding industrial applications.",
+                    indTitle: "Engineering capability applied across demanding industries.",
+                    indLead: "Dynalektric supports power, control and equipment applications across established infrastructure, mobility and industrial sectors.",
+                    rndTitle: "Custom requirements engineered in-house.",
+                    rndLead: "Our engineering and new product development teams take a customer specification through feasibility, design, prototyping, validation and pilot production. One team, one process.",
+                    rndImg: "Dynalektric/demo1DL/assets/engineering-npd.jpg",
+                    qualTitle: "Type-tested designs, full documentation, traceable processes.",
+                    qualLead: "Every product ships with routine and type test reports, QAP documentation and material traceability. Designs validated against IEC, IS and customer specifications.",
+                    casesTitle: "Engineering outcomes from real applications.",
+                    casesLead: "Selected examples of how Dynalektric applies engineering, manufacturing and testing capability across industrial applications."
+                },
+                about: {
+                    title: "Engineering and Manufacturing Capability",
+                    desc: "Dynalektric supports OEMs, utilities, and EPC contractors with application-specific engineering, manufacturing, and testing of electrical and electronic equipment."
+                }
+            }
+        },
+        products: [
+            {
+                title: "Power Transformation and Magnetics",
+                category: "Capability",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/card-magnetics.jpg",
+                description: "Transformers, reactors and magnetic components engineered for power conversion, distribution, harmonic control and specialised industrial applications.",
+                features: JSON.stringify(["Application-specific engineering", "Manufacturing and testing", "Industrial and infrastructure use"]),
+                specifications: JSON.stringify({"cta": "Explore Magnetics"}),
+                industries: JSON.stringify(["Power Grid", "Renewable Sectors"]),
+                slug: "power-transformation-magnetics"
+            },
+            {
+                title: "Control, Distribution and Panel Engineering",
+                category: "Capability",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/card-control.jpg",
+                description: "Panel and distribution assemblies developed around control, operating, safety and application requirements for railway, power and industrial equipment.",
+                features: JSON.stringify(["Control integration", "Assembly and wiring", "Testing and documentation"]),
+                specifications: JSON.stringify({"cta": "Explore Panel Engineering"}),
+                industries: JSON.stringify(["Railway & Traction", "Heavy Industries"]),
+                slug: "control-distribution-panel-engineering"
+            },
+            {
+                title: "DC Power and Electronic Systems",
+                category: "Capability",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/card-power.jpg",
+                description: "DC power, charging and electronic systems configured for equipment duty, operational environments and specialised industrial applications.",
+                features: JSON.stringify(["Duty-specific design", "Power conversion", "Validation and testing"]),
+                specifications: JSON.stringify({"cta": "Explore Power Electronics"}),
+                industries: JSON.stringify(["Material Handling", "Data Centers"]),
+                slug: "dc-power-electronic-systems"
+            },
+            {
+                title: "Integrated Components and Assemblies",
+                category: "Capability",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/card-integrated.jpg",
+                description: "Supporting electrical and electronic components integrated into railway, power, equipment and cross-sector industrial systems.",
+                features: JSON.stringify(["Component integration", "Custom assemblies", "Cross-sector applications"]),
+                specifications: JSON.stringify({"cta": "Explore Integrated Solutions"}),
+                industries: JSON.stringify(["Heavy Industries", "Railway & Traction"]),
+                slug: "integrated-components-assemblies"
+            },
+            {
+                title: "Railway & Traction",
+                category: "Industry",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-railways.jpg",
+                description: "Electrical and electronic systems supporting onboard, trackside and railway equipment applications.",
+                features: JSON.stringify(["Traction equipment", "Onboard systems", "Control and auxiliary power"]),
+                specifications: JSON.stringify({"cta": "Explore Railway Applications"}),
+                slug: "railway-traction"
+            },
+            {
+                title: "Renewable Sectors",
+                category: "Industry",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-renewables.jpg",
+                description: "Magnetics, reactors and power systems supporting conversion, grid integration and renewable-energy infrastructure.",
+                features: JSON.stringify(["Solar and wind", "Grid integration", "Energy conversion"]),
+                specifications: JSON.stringify({"cta": "Explore Renewable Applications"}),
+                slug: "renewable-sectors"
+            },
+            {
+                title: "Power & Utilities",
+                category: "Industry",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-powergrid.jpg",
+                description: "Power conversion, distribution and control solutions supporting utilities, EPC contractors and infrastructure projects.",
+                features: JSON.stringify(["Power distribution", "Utility systems", "EPC projects"]),
+                specifications: JSON.stringify({"cta": "Explore Power Applications"}),
+                slug: "power-utilities"
+            },
+            {
+                title: "Heavy Industries",
+                category: "Industry",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-heavy.jpg",
+                description: "Electrical, magnetic and control solutions developed for demanding process and heavy-equipment environments.",
+                features: JSON.stringify(["Steel and cement", "Mining", "Process industries"]),
+                specifications: JSON.stringify({"cta": "Explore Heavy Industry Applications"}),
+                slug: "heavy-industries"
+            },
+            {
+                title: "Material Handling & Warehousing",
+                category: "Industry",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-mhe.jpg",
+                description: "Charging, power electronics and control systems supporting forklifts, AGVs and warehouse equipment.",
+                features: JSON.stringify(["Forklifts", "AGVs", "Charging systems"]),
+                specifications: JSON.stringify({"cta": "Explore Material Handling Applications"}),
+                slug: "material-handling-warehousing"
+            },
+            {
+                title: "Data Centers",
+                category: "Industry",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-datacenter.jpg",
+                description: "Distribution, UPS interface and critical-power support for data-centre infrastructure and operational continuity.",
+                features: JSON.stringify(["Critical power", "UPS interface", "Distribution systems"]),
+                specifications: JSON.stringify({"cta": "Explore Data Center Applications"}),
+                specifications: JSON.stringify({"cta": "Explore Data Center Applications"}),
+                slug: "data-centers"
+            },
+            {
+                title: "Magnetic components for demanding rolling-stock applications",
+                category: "Case Study",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-railways.jpg",
+                description: "Rolling-stock equipment required magnetic components able to hold performance under vibration, thermal load and constrained installation envelopes.",
+                features: JSON.stringify(["Application engineering", "Manufacturing", "Testing and documentation"]),
+                specifications: JSON.stringify({"cta": "View Application", "industry": "Railway & Traction", "response": "Dynalektric engineered application-specific magnetics, then manufactured and validated them against the relevant railway and IEC requirements before delivery."}),
+                slug: "magnetic-components-rolling-stock"
+            },
+            {
+                title: "Reactor solution supporting renewable power conversion",
+                category: "Case Study",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-renewables.jpg",
+                description: "A renewable power-conversion application needed reactors suited to harmonic conditions, grid-integration duty and a long project life.",
+                features: JSON.stringify(["Application engineering", "Manufacturing", "Testing and documentation"]),
+                specifications: JSON.stringify({"cta": "View Application", "industry": "Renewable Energy", "response": "Dynalektric developed reactor designs for the duty profile, then manufactured and tested them to the project and IEC requirements."}),
+                slug: "reactor-solution-renewable-power"
+            },
+            {
+                title: "Power equipment engineered for utility and infrastructure requirements",
+                category: "Case Study",
+                status: "Published",
+                image_url: "Dynalektric/demo1DL/assets/industry-powergrid.jpg",
+                description: "A utility and infrastructure application required power equipment built to distribution duty, documentation standards and inspection requirements.",
+                features: JSON.stringify(["Application engineering", "Manufacturing", "Testing and documentation"]),
+                specifications: JSON.stringify({"cta": "View Application", "industry": "Power & Utilities", "response": "Dynalektric engineered the equipment to the application, then manufactured and tested it with documentation aligned to the project handover."}),
+                slug: "power-equipment-utility-infrastructure"
+            }
+        ],
+        documents: [
+            {
+                title: "Dynalektric Corporate Brochure",
+                doc_type: "Catalog",
+                version: 1,
+                file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                status: "Published",
+                original_filename: "dynalektric_corporate.pdf"
+            }
+        ],
+        marketing: [
+            {
+                title: "Dynalektric Hero Video",
+                resource_type: "Video",
+                file_url: "Dynalektric/demo1DL/public/videos/Dynalektric_Hero.mp4",
+                description: "Cinematic hero video representing engineering and manufacturing."
+            }
+        ],
+        partners: [
+            { name: "Dynalektric Distributors", country: "Global", website_link: "https://dynalektric.com" }
+        ],
+        media: [
+            { filename: "card-control.jpg", file_url: "Dynalektric/demo1DL/assets/card-control.jpg", file_type: "image/jpeg", size: 265012 },
+            { filename: "card-integrated.jpg", file_url: "Dynalektric/demo1DL/assets/card-integrated.jpg", file_type: "image/jpeg", size: 302209 },
+            { filename: "card-magnetics.jpg", file_url: "Dynalektric/demo1DL/assets/card-magnetics.jpg", file_type: "image/jpeg", size: 279609 },
+            { filename: "card-power.jpg", file_url: "Dynalektric/demo1DL/assets/card-power.jpg", file_type: "image/jpeg", size: 248071 },
+            { filename: "dynalektric-logo-reversed.png", file_url: "Dynalektric/demo1DL/assets/dynalektric-logo-reversed.png", file_type: "image/png", size: 15796 },
+            { filename: "dynalektric-logo.png", file_url: "Dynalektric/demo1DL/assets/dynalektric-logo.png", file_type: "image/png", size: 84269 },
+            { filename: "engineering-npd.jpg", file_url: "Dynalektric/demo1DL/assets/engineering-npd.jpg", file_type: "image/jpeg", size: 255464 },
+            { filename: "hero-poster.jpg", file_url: "Dynalektric/demo1DL/assets/hero-poster.jpg", file_type: "image/jpeg", size: 302209 },
+            { filename: "industry-datacenter.jpg", file_url: "Dynalektric/demo1DL/assets/industry-datacenter.jpg", file_type: "image/jpeg", size: 314535 },
+            { filename: "industry-heavy.jpg", file_url: "Dynalektric/demo1DL/assets/industry-heavy.jpg", file_type: "image/jpeg", size: 400517 },
+            { filename: "industry-mhe.jpg", file_url: "Dynalektric/demo1DL/assets/industry-mhe.jpg", file_type: "image/jpeg", size: 362006 },
+            { filename: "industry-powergrid.jpg", file_url: "Dynalektric/demo1DL/assets/industry-powergrid.jpg", file_type: "image/jpeg", size: 313818 },
+            { filename: "industry-railways.jpg", file_url: "Dynalektric/demo1DL/assets/industry-railways.jpg", file_type: "image/jpeg", size: 264729 },
+            { filename: "industry-renewables.jpg", file_url: "Dynalektric/demo1DL/assets/industry-renewables.jpg", file_type: "image/jpeg", size: 261450 },
+            { filename: "Dynalektric_Hero.mp4", file_url: "Dynalektric/demo1DL/public/videos/Dynalektric_Hero.mp4", file_type: "video/mp4", size: 5000000 }
         ]
     }
 };

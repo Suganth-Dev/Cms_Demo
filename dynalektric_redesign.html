@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnooRyze CMS | Dynalektric Redesign</title>
+    
+    <!-- Lucide Icons & Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/redesign.css">
+</head>
+<body>
+    <div class="redesign-app-container">
+        
+        <!-- Right Panel: Full-Width Live Simulated Browser Viewport -->
+        <main class="preview-viewport-panel" style="width: 100%; border-left: none;">
+            <div class="inline-editor-toolbar" style="background: var(--admin-bg); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--admin-border);">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <a href="index.html" class="back-to-cms-btn" style="color: var(--admin-text-secondary); text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 500;">
+                        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Exit Editor
+                    </a>
+                    <span style="color: var(--admin-text-primary); font-weight: 600; font-size: 1.1rem; border-left: 1px solid var(--admin-border); padding-left: 16px;">Visual Page Builder</span>
+                </div>
+                <div>
+                    <button class="save-publish-btn" onclick="saveInlineChanges()" style="background: var(--admin-accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="cloud-lightning" style="width:18px;height:18px;"></i> Publish Changes
+                    </button>
+                </div>
+            </div>
+            <header class="browser-chrome">
+                <div class="chrome-dots">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                </div>
+                
+                <div class="chrome-address-bar">
+                    <i data-lucide="lock" class="lock-icon"></i>
+                    <span id="chrome-address-url">/dynalektric.html</span>
+                    <button class="chrome-action-btn" onclick="reloadPreview()" title="Reload Preview">
+                        <i data-lucide="rotate-cw"></i>
+                    </button>
+                </div>
+
+                <div class="chrome-viewport-toggles">
+                    <button class="viewport-toggle active" data-mode="desktop" title="Desktop View">
+                        <i data-lucide="monitor"></i>
+                    </button>
+                    <button class="viewport-toggle" data-mode="tablet" title="Tablet View">
+                        <i data-lucide="tablet"></i>
+                    </button>
+                    <button class="viewport-toggle" data-mode="mobile" title="Mobile View">
+                        <i data-lucide="smartphone"></i>
+                    </button>
+                </div>
+            </header>
+            
+            <div class="iframe-container" id="preview-iframe-wrapper">
+                <iframe id="preview-frame" src="dynalektric.html?site=dynalektric&editMode=true" allow="clipboard-write"></iframe>
+            </div>
+        </main>
+        
+    </div>
+
+    <!-- Alert Toast notifications -->
+    <div class="admin-alert-toast" id="redesign-toast">
+        <span id="redesign-toast-message">Configuration updated successfully!</span>
+    </div>
+
+    <!-- Product CRUD Modal -->
+    <div class="admin-modal-overlay" id="product-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 id="product-modal-title">Create Entry</h3>
+                <button class="admin-modal-close" onclick="closeProductModal()">&times;</button>
+            </div>
+            <form id="product-form" onsubmit="handleProductSubmit(event)">
+                <input type="hidden" id="product-id">
+                
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="product-title">Item Name / Title</label>
+                        <input type="text" id="product-title" class="admin-input-control" required placeholder="e.g. New Capability">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="product-category">Category</label>
+                        <input type="text" id="product-category" class="admin-input-control" required placeholder="e.g. Case Study">
+                    </div>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label for="product-image">Product Image</label>
+                    <div style="display:flex; gap:10px; margin-bottom:8px;">
+                        <input type="file" id="product-image-file" accept="image/*" style="display:none;">
+                        <button type="button" class="action-btn" onclick="document.getElementById('product-image-file').click()" style="padding:10px 14px; display:inline-flex; align-items:center; gap:6px;">
+                            <i data-lucide="upload" style="width:14px; height:14px;"></i> Upload File
+                        </button>
+                        <input type="text" id="product-image" class="admin-input-control" placeholder="Or paste image URL..." style="margin-bottom:0; flex-grow:1;">
+                    </div>
+                    <div id="product-image-preview-container" style="display:none; margin-bottom:10px; position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid var(--admin-border); background:#F8FAFC; height:140px; max-width:240px;">
+                        <img id="product-image-preview" src="" style="width:100%; height:100%; object-fit:cover;">
+                        <button type="button" onclick="clearProductImage()" style="position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px;">&times;</button>
+                    </div>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label for="product-desc">Short Description</label>
+                    <textarea id="product-desc" class="admin-input-control" required placeholder="Write a short summary..."></textarea>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label for="product-features">Key Bullet Points (One per line)</label>
+                    <textarea id="product-features" class="admin-input-control" placeholder="Features..."></textarea>
+                </div>
+                
+                <div class="admin-form-group-full">
+                    <label>Specifications (JSON format)</label>
+                    <textarea id="product-specs" class="admin-input-control" style="font-family: monospace;" placeholder='{"cta": "Explore Capability"}'></textarea>
+                </div>
+                
+                <div class="form-actions-footer">
+                    <button type="button" class="action-btn" onclick="closeProductModal()">Cancel</button>
+                    <button type="submit" class="action-btn action-btn-primary">Save Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CDNs -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/dynalektric_redesign.js"></script>
+</body>
+</html>

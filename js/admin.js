@@ -52,6 +52,17 @@ function initAdminApp() {
             currentSiteSlug = e.target.value;
             showToast(`Switched active context to: ${currentSiteSlug.toUpperCase()}`);
             
+            // Immediately update titles and buttons so user doesn't click stale links while waiting
+            const activeLi = document.querySelector('#sidebar-menu-links li.active');
+            let targetView = 'dashboard';
+            if (activeLi) {
+                targetView = activeLi.getAttribute('data-target');
+            }
+            
+            const displayContext = currentSiteSlug.toUpperCase();
+            document.getElementById('admin-view-title').textContent = `Loading [${displayContext}]...`;
+            updateLaunchRedesignButtons();
+
             // Auto-seed if database settings are empty for this tenant
             try {
                 const settingsObj = await getSettings(currentSiteSlug);
@@ -63,12 +74,8 @@ function initAdminApp() {
                 console.warn("Seeding check on context change failed:", err);
             }
 
-            // Re-render active section
-            const activeLi = document.querySelector('#sidebar-menu-links li.active');
-            if (activeLi) {
-                const targetView = activeLi.getAttribute('data-target');
-                switchSectionView(targetView);
-            }
+            // Re-render active section with real data
+            switchSectionView(targetView);
         });
     }
 
@@ -210,13 +217,19 @@ function updateLaunchRedesignButtons() {
         htmlFile = 'hospital.html';
     } else if (currentSiteSlug === 'agree') {
         htmlFile = 'agree.html';
+    } else if (currentSiteSlug === 'dynalektric') {
+        htmlFile = 'dynalektric.html';
     }
     
     if (launchBtn) {
         launchBtn.setAttribute('href', htmlFile);
     }
     if (redesignBtn) {
-        redesignBtn.setAttribute('href', `redesign.html?site=${currentSiteSlug}`);
+        if (currentSiteSlug === 'dynalektric') {
+            redesignBtn.setAttribute('href', `dynalektric_redesign.html`);
+        } else {
+            redesignBtn.setAttribute('href', `redesign.html?site=${currentSiteSlug}`);
+        }
     }
 }
 
@@ -1295,6 +1308,8 @@ function initLoginCanvasBackground() {
                     htmlFile = 'hospital.html';
                 } else if (node.slug === 'agree') {
                     htmlFile = 'agree.html';
+                } else if (node.slug === 'dynalektric') {
+                    htmlFile = 'dynalektric.html';
                 }
                 window.open(htmlFile, '_blank');
             }
@@ -1462,12 +1477,35 @@ function initLoginCanvasBackground() {
                 ctx.lineTo(cx, cy - 8);
                 ctx.stroke();
             }
+        },
+        {
+            name: "DYNALEKTRIC",
+            slug: "dynalektric",
+            angleOffset: 0, // Top center
+            color: "#0077B6",
+            accent: "#003366",
+            badge: "Engineering",
+            pulse: 0,
+            hoverAlpha: 0,
+            x: 0, y: 0,
+            currentX: 0, currentY: 0,
+            isDragging: false,
+            isSnapping: false,
+            drawIcon: (cx, cy) => {
+                // Draw Bolt/Electricity shape
+                ctx.beginPath();
+                ctx.moveTo(cx + 2, cy - 8);
+                ctx.lineTo(cx - 4, cy + 2);
+                ctx.lineTo(cx + 4, cy + 2);
+                ctx.lineTo(cx - 2, cy + 8);
+                ctx.stroke();
+            }
         }
     ];
 
     // Data Flow Packets running along paths
     const dataPackets = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         dataPackets.push({
             nodeIndex: i,
             progress: Math.random(),
@@ -1569,6 +1607,9 @@ function initLoginCanvasBackground() {
                 } else if (node.slug === 'agree') {
                     targetNodeX = cx + 90;
                     targetNodeY = cy + 300;
+                } else if (node.slug === 'dynalektric') {
+                    targetNodeX = cx;
+                    targetNodeY = cy - 420;
                 }
             } else {
                 if (node.slug === 'maxseal') {
@@ -1583,6 +1624,9 @@ function initLoginCanvasBackground() {
                 } else if (node.slug === 'agree') {
                     targetNodeX = cx + nodeDistance;
                     targetNodeY = cy + 110;
+                } else if (node.slug === 'dynalektric') {
+                    targetNodeX = cx;
+                    targetNodeY = cy - 250;
                 }
             }
 

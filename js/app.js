@@ -57,12 +57,14 @@ async function initApp() {
 async function loadSettingsAndSync() {
     try {
         const isDbReady = await checkTableExistence();
+        const activeSite = getActiveSiteSlug();
+
         if (!isDbReady) {
-            showDbWarningBanner();
+            if (activeSite !== 'dynalektric') {
+                showDbWarningBanner();
+            }
             return;
         }
-
-        const activeSite = getActiveSiteSlug();
         appSettings = await getSettings(activeSite);
         
         // Auto-seed if database settings are empty
@@ -100,18 +102,20 @@ async function loadSettingsAndSync() {
             if (email) email.textContent = appSettings.email;
 
             // Header & Footer Logo Splits
-            document.querySelectorAll('.logo, .footer-logo').forEach(el => {
-                const text = appSettings.logoText || 'MAX-SEAL';
-                if (text.includes(' ')) {
-                    const parts = text.split(' ');
-                    el.innerHTML = `${parts[0]}<span> ${parts.slice(1).join(' ')}</span>`;
-                } else if (text.includes('-')) {
-                    const parts = text.split('-');
-                    el.innerHTML = `${parts[0]}<span>${parts[1]}</span>`;
-                } else {
-                    el.innerHTML = `${text.substring(0, Math.ceil(text.length/2))}<span>${text.substring(Math.ceil(text.length/2))}</span>`;
-                }
-            });
+            if (activeSite !== 'dynalektric') {
+                document.querySelectorAll('.logo, .footer-logo').forEach(el => {
+                    const text = appSettings.logoText || 'MAX-SEAL';
+                    if (text.includes(' ')) {
+                        const parts = text.split(' ');
+                        el.innerHTML = `${parts[0]}<span> ${parts.slice(1).join(' ')}</span>`;
+                    } else if (text.includes('-')) {
+                        const parts = text.split('-');
+                        el.innerHTML = `${parts[0]}<span>${parts[1]}</span>`;
+                    } else {
+                        el.innerHTML = `${text.substring(0, Math.ceil(text.length/2))}<span>${text.substring(Math.ceil(text.length/2))}</span>`;
+                    }
+                });
+            }
 
             // Socials mapping
             const fb = document.getElementById('footer-fb');
@@ -196,6 +200,28 @@ function getTerminology() {
             tab2: "Organic Methods",
             tab3: "Crop Profiles"
         };
+    } else if (slug === 'dynalektric') {
+        return {
+            heroHeading: "Engineering built for industrial progress",
+            heroDesc: "In-house engineering, manufacturing and testing for infrastructure, mobility, energy and industrial applications.",
+            productLabel: "Engineering Solutions",
+            exploreProductsLabel: "Explore Capabilities",
+            exploreCatalogsLabel: "Corporate Resources",
+            productsHeading: "What we engineer",
+            productsSub: "Engineering systems that power, control and support industrial operations.",
+            moreBtn: "Explore All Products",
+            catalogLabel: "Engineering Brochures & Catalogs",
+            catalogSub: "Download technical documentation, testing standards, and company overviews.",
+            timelineHeading: "Our Journey",
+            contactCta: "Discuss Your Requirement",
+            contactCtaSub: "Contact Dynalektric to discuss industrial engineering, manufacturing, product development, or customised electrical systems.",
+            contactBtn: "Contact Our Engineering Team",
+            subjectLabel: "Capability",
+            specTitle: "Details & Applications",
+            tab1: "Overview",
+            tab2: "Application",
+            tab3: "Features"
+        };
     } else {
         // Default: maxseal
         return {
@@ -255,6 +281,7 @@ function renderFloatingSwitcher() {
             <option value="abcschool" ${active === 'abcschool' ? 'selected' : ''}>ABC School (School)</option>
             <option value="hospital" ${active === 'hospital' ? 'selected' : ''}>City Hospital (Hospital)</option>
             <option value="agree" ${active === 'agree' ? 'selected' : ''}>Agree Farms (Agriculture)</option>
+            <option value="dynalektric" ${active === 'dynalektric' ? 'selected' : ''}>Dynalektric (Engineering)</option>
         </select>
     `;
     document.body.appendChild(switcher);
