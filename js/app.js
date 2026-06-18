@@ -25,8 +25,8 @@ async function initApp() {
     window.addEventListener('hashchange', router);
     window.addEventListener('load', router);
 
-    // 4. Render demo floating switcher widget
-    renderFloatingSwitcher();
+    // 4. Render demo floating switcher widget (Removed)
+    // renderFloatingSwitcher();
 
     // 5. Mobile Menu Toggle
     const menuBtn = document.getElementById('menu-btn');

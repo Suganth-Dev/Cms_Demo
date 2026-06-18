@@ -60,17 +60,6 @@
   <script type="text/babel" src="Dynalektric/demo1DL/page-contact.jsx"></script>
   <script type="text/babel" src="Dynalektric/demo1DL/app.jsx"></script>
 
-  <!-- Include app.js to render floating switcher -->
-  <script src="js/app.js"></script>
-  <script>
-      // Force app.js to render the floating switcher for the dynamic tenant preview
-      document.addEventListener('DOMContentLoaded', () => {
-          setTimeout(() => {
-              if (typeof renderFloatingSwitcher === 'function') {
-                  renderFloatingSwitcher('dynalektric');
-              }
-          }, 1500); // Small delay to let React mount first
-      });
-  </script>
+
 </body>
 </html>
