@@ -1,0 +1,116 @@
+DYNALEKTRIC INTERIM REVIEW BUILD
+Hosting Instructions
+Build date: 2026-06-06
+Prepared by: InnooRyze
+========================================
+
+PURPOSE
+This is an interim client-review build of the Dynalektric website.
+It must not replace the existing production site without approval.
+
+----------------------------------------
+DEPLOYMENT STEPS
+----------------------------------------
+
+1. Upload the complete contents of this folder to the selected BigRock
+   hosting web root or temporary review subfolder.
+   Upload everything including the assets/ and public/ sub-folders.
+
+2. Use index.html as the default homepage.
+   Most web hosts serve index.html automatically from the web root.
+
+3. Preserve the complete folder structure exactly as-is.
+   Do not move, rename or reorganise any files or folders.
+
+4. Preserve the assets/ and public/ folders exactly.
+   assets/            - logos, card images, industry images, hero poster
+   public/videos/     - hero video file (Dynalektric_Hero.mp4, ~28 MB)
+
+5. Do not rename any file or folder.
+
+6. Ensure HTTPS is enabled on the hosting account.
+
+7. Ensure the following file types are served with correct MIME types:
+   .html   text/html
+   .js     application/javascript
+   .jsx    application/javascript  (see note below)
+   .css    text/css
+   .mp4    video/mp4
+   .svg    image/svg+xml
+   .png    image/png
+   .jpg    image/jpeg
+   .jpeg   image/jpeg
+   .webp   image/webp
+   .xml    application/xml
+   .txt    text/plain
+   .pdf    application/pdf
+
+8. Confirm all public page URLs open directly:
+   /
+   /Dynalektric.html
+   /about.html
+   /products-solutions.html
+   /innovation-rd.html
+   /industries-applications.html
+   /export.html
+   /contact.html
+
+9. Confirm the hero video loads from:
+   /public/videos/Dynalektric_Hero.mp4
+
+10. This is an interim client-review build.
+    It must not replace the existing production site without approval.
+
+11. Do not upload standalone, print, old or backup files.
+    This package already excludes them.
+
+12. Contact InnooRyze if any JSX MIME type, file path or asset loading
+    issue occurs.
+
+----------------------------------------
+JSX MIME TYPE NOTE
+----------------------------------------
+
+This site uses in-browser Babel to compile JSX at runtime.
+JSX files (.jsx) must be served by the web server.
+
+If BigRock returns a 404 or refuses to serve .jsx files:
+- Check that .jsx is not blocked in the server configuration.
+- Add the following to .htaccess in the web root if needed:
+
+  AddType application/javascript .jsx
+
+If the server uses nginx, add to the server block:
+  types { application/javascript jsx; }
+
+BigRock cPanel hosting typically allows .htaccess overrides.
+
+----------------------------------------
+REACT AND BABEL CDN NOTE
+----------------------------------------
+
+This site loads React 18 and Babel via unpkg.com CDN.
+The review environment requires an active internet connection.
+CDN files are loaded from:
+  https://unpkg.com/react@18.3.1/
+  https://unpkg.com/react-dom@18.3.1/
+  https://unpkg.com/@babel/standalone@7.29.0/
+
+----------------------------------------
+EXPECTED PAGE URLS
+----------------------------------------
+
+Homepage (default):    /
+Homepage (named):      /Dynalektric.html
+About:                 /about.html
+Products and Solutions:/products-solutions.html
+Innovation Portfolio:  /innovation-rd.html
+Industries:            /industries-applications.html
+Export:                /export.html
+Contact:               /contact.html
+SEO sitemap:           /sitemap.xml
+Robots:                /robots.txt
+
+----------------------------------------
+END OF INSTRUCTIONS
+----------------------------------------

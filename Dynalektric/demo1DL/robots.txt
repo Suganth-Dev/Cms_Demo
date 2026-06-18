@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dynalektric.com/sitemap.xml
+
+# Exclude standalone, print, backup and preview files from crawling.
+# These files should also be removed from the deployment package before going live.
+Disallow: /Dynalektric (Standalone).html
+Disallow: /Dynalektric-print.html
+Disallow: /Dynalektric-standalone-src.html
